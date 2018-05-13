@@ -15,7 +15,7 @@ class ComprasNet:
     def __init__(self):
         pass
 
-    def get_data_dict_to_search_bids(self):
+    def get_data_dict_to_search_auctions(self):
         return {
             "numprp": "",
             "dt_publ_ini": None,
@@ -41,17 +41,17 @@ class ComprasNet:
             "numpag": 1,
         }
 
-    def search_bids_by_date(self, search_date):
-        """Search bids only by date, retrieve and save page results in tmp directory and return
+    def search_auctions_by_date(self, search_date):
+        """Search auctions only by date, retrieve and save page results in tmp directory and return
         a list of filenames saved."""
         filenames = []
 
         page = 0
-        data = self.get_data_dict_to_search_bids()
+        data = self.get_data_dict_to_search_auctions()
         if not isinstance(search_date, date):
             search_date = search_date.date()
 
-        log.info('getting bids from {:%d/%m/%Y}...'.format(search_date))
+        log.info('getting auctions from {:%d/%m/%Y}...'.format(search_date))
         while True:
             page += 1
             data['dt_publ_ini'] = search_date.strftime("%d/%m/%Y")
@@ -73,7 +73,7 @@ class ComprasNet:
 
         response = requests.get(self.SEARCH_BIDS_URL, data)
         if not response.status_code == 200:
-            log.error('error trying to get bids from {}, page {}. Status code: {}'.format(
+            log.error('error trying to get auctions from {}, page {}. Status code: {}'.format(
                 data['dt_publ_ini'], data['numpag'], response.status_code
             ))
             return None, is_last_page
@@ -115,4 +115,4 @@ if __name__ == '__main__':
     })
 
     comprasnet = ComprasNet()
-    comprasnet.search_bids_by_date(datetime.now())
+    comprasnet.search_auctions_by_date(datetime.now())
