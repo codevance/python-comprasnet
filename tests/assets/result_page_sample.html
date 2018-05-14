@@ -1,0 +1,461 @@
+
+<!-- saved from url=(0069)http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Comprasnet</title>
+	<!--<meta http-equiv="expires" Content="0">
+	<meta http-equiv="cache-intCountrol" Content="private">
+	<meta http-equiv="pragma" Content="no-cache">	-->	
+	<link rel="stylesheet" href="./compras_files/style1.css" type="text/css">
+	<style>
+	a.legenda:visited {
+		color: #CC0033;
+	}
+	a.legenda:link {
+		color: #CC0033;
+	}
+	a.legenda:hover {
+		color: #CC0033;
+	}
+	</style>
+	<script type="text/javascript" src="./compras_files/aguarde.js"></script>	
+	<script type="text/javascript">
+		function Navegacao(i)
+		{	  		
+			if (aguarde()){
+  				location.href="ConsLicitacao_Relacao.asp?numprp=&dt_publ_ini=02/05/2018&dt_publ_fim=02/05/2018&chkModalidade=1,2,3,20,5,99&chk_concor=31,32,41,42&chk_pregao=1,2,3,4&chk_rdc=1,2,3,4&optTpPesqMat=M&optTpPesqServ=S&chkTodos=-1&chk_concorTodos=-1&chk_pregaoTodos=-1&txtlstUf=&txtlstMunicipio=&txtlstUasg=&txtlstGrpMaterial=&txtlstClasMaterial=&txtlstMaterial=&txtlstGrpServico=&txtlstServico=&txtObjeto=&numpag=" + i; 
+  				bloqueiaAcoes(document);
+  			}
+		}	
+		
+  		function Voltar(){
+  			if (aguarde()){
+  				location.href="ConsLicitacao_Filtro.asp?numprp=&dt_publ_ini=02/05/2018&dt_publ_fim=02/05/2018&chkModalidade=1,2,3,20,5,99&chk_concor=31,32,41,42&chk_pregao=1,2,3,4&chk_rdc=1,2,3,4&optTpPesqMat=M&optTpPesqServ=S&chkTodos=-1&chk_concorTodos=-1&chk_pregaoTodos=-1&txtlstUf=&txtlstMunicipio=&txtlstUasg=&txtlstGrpMaterial=&txtlstClasMaterial=&txtlstMaterial=&txtlstGrpServico=&txtlstServico=&txtObjeto=";
+  				bloqueiaAcoes(document);
+  			}
+  		}
+  		function Filtrar(){  			
+  			if (aguarde()){
+  				location.href="ConsLicitacao_Filtro.asp";
+  				bloqueiaAcoes(document);
+  			}
+  		}  		
+  		
+  		function VisualizarItens(formulario, parametros){
+			if(aguarde()){
+				bloqueiaAcoes(document);
+				formulario.action = "download/download_editais_detalhe.asp" + parametros
+				formulario.submit();
+			}
+		}
+
+  		function visualizarHistoricoEventos(formulario, parametros){
+			var url = "/ConsultaLicitacoes/ConsLicitacao_HistoricoEventos.asp" + parametros
+			window.open(url, 'HistoricoEventos', 'maximized=yes, screenX=250, screenY=0, toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=500,height=350');
+			return false;
+		}
+
+	//ESSAS SERÃO AS TECLAS DESABILITADAS
+    var asciiF1        = 112;
+    var asciiF2        = 113;
+    var asciiF3        = 114;
+    var asciiF4        = 115;
+    var asciiF5        = 116;
+    var asciiF6        = 117;
+    var asciiF11       = 122;
+    var asciiF12       = 123;
+        
+    //ie has to block in the key down
+    if(document.all){ 
+        document.onkeydown = onKeyPress;
+    //NS and mozilla have to block in the key press
+    }else if (document.layers || document.getElementById){ 
+        document.onkeypress = onKeyPress;
+    }
+    
+    function onKeyPress(evt) {
+        window.status = '';
+        //get the event object
+        var oEvent = (window.event) ? window.event : evt;
+      
+        //hmmm in mozilla this is jacked, so i have to record these seperate
+        //what key was pressed
+        var nKeyCode =  oEvent.keyCode ? oEvent.keyCode : oEvent.which ? oEvent.which : void 0;
+        var bIsFunctionKey = false;
+    
+        //hmmm in mozilla the keycode would contain a function key ONLY IF the charcode IS 0  
+        //else key code and charcode read funny, the charcode for 't'
+        //returns 116, which is the same as the ascii for F5
+        //SOOO,... to check if a the keycode is truly a function key,
+        //ONLY check when the charcode is null OR 0, IE returns null, mozilla returns 0
+        if(oEvent.charCode == null || oEvent.charCode == 0){
+            bIsFunctionKey = (nKeyCode >= asciiF1 && nKeyCode <= asciiF12)
+        }
+      
+        //convert the key to a character, makes for more readable code
+        var sChar = String.fromCharCode(nKeyCode).toUpperCase();
+    
+        //get the active tag that has the focus on the page, and its tag type
+        var oTarget = (oEvent.target) ? oEvent.target : oEvent.srcElement;
+        var sTag = oTarget.tagName.toLowerCase();
+        var sTagType = oTarget.getAttribute("type");
+      
+        var bAltPressed = (oEvent.altKey) ? oEvent.altKey : oEvent.modifiers & 1 > 0;
+        var bShiftPressed = (oEvent.shiftKey) ? oEvent.shiftKey : oEvent.modifiers & 4 > 0;
+        var bCtrlPressed = (oEvent.ctrlKey) ? oEvent.ctrlKey : oEvent.modifiers & 2 > 0;
+    
+        var bRet = true; //assume true as that will be the case most times
+        //alert (nKeyCode + ' ' + sChar + ' ' + sTag + ' ' + sTagType + ' ' + bShiftPressed + ' ' + bCtrlPressed + ' ' + bAltPressed);
+    
+        if(sTagType != null){sTagType = sTagType.toLowerCase();}
+    
+        //allow these keys inside a text box
+        //if  (sTag == "textarea" || (sTag == "input" && (sTagType == "text" || sTagType == "password")) && ((bCtrlPressed && (nKeyCode == asciiLeftArrow || nKeyCode == asciiRightArrow)))){
+        //    return true;
+        //}else if(bAltPressed && (nKeyCode == asciiLeftArrow || nKeyCode == asciiRightArrow)){ // block alt + left or right arrow
+        //    bRet = false;
+        //}else if(bCtrlPressed && (sChar == 'A' || sChar == 'C' || sChar == 'V' || sChar == 'X')){ // ALLOW cut, copy and paste, and SELECT ALL
+        //    bRet = true;
+        //}else 
+        if(bIsFunctionKey){ // Capture and stop these keys
+            bRet = false;
+        }else if(bCtrlPressed && (sChar == 'R')){ // block Control + R
+            bRet = false;
+        }    
+      
+        if(!bRet){
+            try{
+                oEvent.returnValue = false;
+                oEvent.cancelBubble = true;
+    
+                if(document.all){ //IE
+                    oEvent.keyCode = 0;
+                }else{ //NS
+                    oEvent.preventDefault();
+                    oEvent.stopPropagation();
+                }
+				//alert(msg);
+            }catch(ex){
+                //alert(msg);
+            }
+        }
+        return bRet;
+    }
+	</script>
+
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" leftmargin="15" topmargin="5" marginwidth="0" marginheight="0" data-feedly-mini="yes" cz-shortcut-listen="true">	
+
+<!-- frame e tabela que apresentarão a mensagem de aguarde na tela -->
+<iframe id="frameloading" name="frameloading" src="javascript:false;" scrolling="no" frameborder="0" style="display: none; position: absolute; left: 0; top: 0; z-index: -1;" src="./compras_files/saved_resource.html"></iframe>
+<table style="display:none; position: absolute;" id="loading" name="loading" class="box">
+	<tbody><tr><td class="cabecbox">Aguarde!</td></tr>
+</tbody></table>
+
+	<table width="98%" border="0" cellspacing="0" cellpadding="0">
+	<tbody><tr>
+		<td colspan="2"><a name="top"><img src="./compras_files/T_licitacoes.gif" width="225" height="23" align="absbottom"></a> </td>
+	</tr>
+	<tr> 			
+		<td width="20">
+		</td><td><img src="./compras_files/risco2.gif" width="100%" height="3"></td>
+	</tr>	
+		
+	<tr>
+		<td width="20"></td>
+	    <td><br>			
+			
+			
+					<form method="post" name="Form0">
+					<a name="F0">
+					<table border="0" width="100%" class="td" cellpadding="1" cellspacing="1">
+					<tbody><tr>
+						<td>
+							<table width="100%">
+							<tbody><tr>
+								<td align="center" class="td_titulo_campo" nowrap="" style="WIDTH: 4%" width="4%" height="25">1</td>
+								<td align="center" class="td_titulo_campo" nowrap=""> Lages- SC</td>
+							</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr bgcolor="#FFFFFF" class="tex3">
+						<td style="padding:10px"><b>					
+							MINISTÉRIO DA DEFESA<br>Comando do Exército<br>Comando Militar do Sul<br>1º Batalhão Ferroviário<br>Código da UASG: 160447<br></b><br><b>Pregão Eletrônico Nº 12/2018</b><br><b>Objeto:</b>&nbsp;Objeto: Pregão Eletrônico -  Eventual aquisição de  materiais de construção, para utilização na Obra da Construção da Ferrovia das Bromélias, Revitalização da Estrada de Acesso ao Destacamento de Controle de Espaço Aéreo do Morro da Igreja,  Obra da SC 114 (antiga SC-430), e Sede da OM - manutenção de PNRs e Instalações internas do Batalhão.<br><b>Edital a partir de:</b>&nbsp;02/05/2018 das 08:00 às 12:00 Hs e das 13:30 às 17:30 Hs<br><b>Endereço:</b>&nbsp;Rua 2.batalhao Rodoviario,sn * - Conta Dinheiro - Lages (SC)<br><b>Telefone:</b>&nbsp;(0xx49) 32519515<br><b>Fax:</b>&nbsp;(0xx49)               <br><b>Entrega da Proposta:</b>&nbsp; a partir de 02/05/2018 às 08:00Hs<br><b>Abertura da Proposta:</b>&nbsp; em 14/05/2018 às 10:00Hs, no endereço: www.comprasnet.gov.br<br><br>					
+							<input type="hidden" name="urlOrigem" value="/ConsultaLicitacoes/ConsLicitacao_Relacao.asp?numprp=&amp;dt_publ_ini=02/05/2018&amp;dt_publ_fim=02/05/2018&amp;chkModalidade=1,2,3,20,5,99&amp;chk_concor=31,32,41,42&amp;chk_pregao=1,2,3,4&amp;chk_rdc=1,2,3,4&amp;optTpPesqMat=M&amp;optTpPesqServ=S&amp;chkTodos=-1&amp;chk_concorTodos=-1&amp;chk_pregaoTodos=-1&amp;txtlstUf=&amp;txtlstMunicipio=&amp;txtlstUasg=&amp;txtlstGrpMaterial=&amp;txtlstClasMaterial=&amp;txtlstMaterial=&amp;txtlstGrpServico=&amp;txtlstServico=&amp;txtObjeto=&amp;numpag=1">
+							<input type="hidden" name="origem" value="1">
+							<a href="http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp#F0" name="hist_eventos" class="legenda" onclick="javascript:visualizarHistoricoEventos(document.Form0,&#39;?coduasg=160447&amp;modprp=5&amp;numprp=122018&#39;);" title="Visualizar histórico de eventos publicados para a licitação">Histórico de eventos publicados...</a>
+							<br><br>
+							<input type="button" name="itens" value="Itens e Download" class="texField2" onclick="javascript:VisualizarItens(document.Form0,&#39;?coduasg=160447&amp;modprp=5&amp;numprp=122018&#39;);" onmouseover="window.status=&#39;Itens da Licitação e Download do Edital&#39;;return true;" title="Clique para ver os itens ou para fazer o Download do Edital"> 
+					</td>
+				</tr>
+				</tbody></table>
+				
+					
+			
+					</a></form><form method="post" name="Form1"><a name="F0">
+					</a><a name="F1">
+					<table border="0" width="100%" class="td" cellpadding="1" cellspacing="1">
+					<tbody><tr>
+						<td>
+							<table width="100%">
+							<tbody><tr>
+								<td align="center" class="td_titulo_campo" nowrap="" style="WIDTH: 4%" width="4%" height="25">2</td>
+								<td align="center" class="td_titulo_campo" nowrap=""> Guarapuava- PR</td>
+							</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr bgcolor="#FFFFFF" class="tex3">
+						<td style="padding:10px"><b>					
+							MINISTÉRIO DA DEFESA<br>Comando do Exército<br>Comando Militar do Sul<br>5ª Região Militar<br>15ªBrigada de Infantaria Mecanizada<br>26ºGrupo de Artilharia de Campanha<br>Código da UASG: 160228<br></b><br><b>Pregão Eletrônico Nº 11/2018</b><br><b>Objeto:</b>&nbsp;Objeto: Pregão Eletrônico -  Aquisição de Material de Acondicionamento e Embalagens<br><b>Edital a partir de:</b>&nbsp;02/05/2018 das 08:00 às 12:00 Hs e das 13:30 às 17:00 Hs<br><b>Endereço:</b>&nbsp;Av Manoel Ribas, 2286 - Centro - Centro - Guarapuava (PR)<br><b>Telefone:</b>&nbsp;(0xx42) 31419115<br><b>Fax:</b>&nbsp;(0xx42)               <br><b>Entrega da Proposta:</b>&nbsp; a partir de 02/05/2018 às 08:00Hs<br><b>Abertura da Proposta:</b>&nbsp; em 14/05/2018 às 09:00Hs, no endereço: www.comprasnet.gov.br<br><br>					
+							<input type="hidden" name="urlOrigem" value="/ConsultaLicitacoes/ConsLicitacao_Relacao.asp?numprp=&amp;dt_publ_ini=02/05/2018&amp;dt_publ_fim=02/05/2018&amp;chkModalidade=1,2,3,20,5,99&amp;chk_concor=31,32,41,42&amp;chk_pregao=1,2,3,4&amp;chk_rdc=1,2,3,4&amp;optTpPesqMat=M&amp;optTpPesqServ=S&amp;chkTodos=-1&amp;chk_concorTodos=-1&amp;chk_pregaoTodos=-1&amp;txtlstUf=&amp;txtlstMunicipio=&amp;txtlstUasg=&amp;txtlstGrpMaterial=&amp;txtlstClasMaterial=&amp;txtlstMaterial=&amp;txtlstGrpServico=&amp;txtlstServico=&amp;txtObjeto=&amp;numpag=1">
+							<input type="hidden" name="origem" value="1">
+							<a href="http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp#F1" name="hist_eventos" class="legenda" onclick="javascript:visualizarHistoricoEventos(document.Form1,&#39;?coduasg=160228&amp;modprp=5&amp;numprp=112018&#39;);" title="Visualizar histórico de eventos publicados para a licitação">Histórico de eventos publicados...</a>
+							<br><br>
+							<input type="button" name="itens" value="Itens e Download" class="texField2" onclick="javascript:VisualizarItens(document.Form1,&#39;?coduasg=160228&amp;modprp=5&amp;numprp=112018&#39;);" onmouseover="window.status=&#39;Itens da Licitação e Download do Edital&#39;;return true;" title="Clique para ver os itens ou para fazer o Download do Edital"> 
+					</td>
+				</tr>
+				</tbody></table>
+				
+					
+			
+					</a></form><form method="post" name="Form2"><a name="F1">
+					</a><a name="F2">
+					<table border="0" width="100%" class="td" cellpadding="1" cellspacing="1">
+					<tbody><tr>
+						<td>
+							<table width="100%">
+							<tbody><tr>
+								<td align="center" class="td_titulo_campo" nowrap="" style="WIDTH: 4%" width="4%" height="25">3</td>
+								<td align="center" class="td_titulo_campo" nowrap=""> Petrolina- PE</td>
+							</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr bgcolor="#FFFFFF" class="tex3">
+						<td style="padding:10px"><b>					
+							MINISTÉRIO DA DEFESA<br>Comando do Exército<br>Comando Militar do Nordeste<br>7ª Região Militar/7ª Divisão de Exército<br>10ªBrigada de Infantaria Motorizada<br>72ºBatalhão de Infantaria Motorizado<br>Código da UASG: 160183<br></b><br><b>Pregão Eletrônico Nº 2/2018</b><br><b>Objeto:</b>&nbsp;Objeto: Pregão Eletrônico -  Registro de preços para eventual contratação de serviços de gerenciamento, controle e fornecimento de combustível por meio de sistema informatizado e utilização de cartão eletrônico ou magnético.<br><b>Edital a partir de:</b>&nbsp;02/05/2018 das 09:30 às 11:45 Hs e das 14:00 às 16:45 Hs<br><b>Endereço:</b>&nbsp;Av. Cardoso de Sa, S/n - Vila Eduardo - Vila Eduardo - Petrolina (PE)<br><b>Telefone:</b>&nbsp;         <br><b>Fax:</b>&nbsp;               <br><b>Entrega da Proposta:</b>&nbsp; a partir de 02/05/2018 às 09:30Hs<br><b>Abertura da Proposta:</b>&nbsp; em 14/05/2018 às 10:00Hs, no endereço: www.comprasnet.gov.br<br><br>					
+							<input type="hidden" name="urlOrigem" value="/ConsultaLicitacoes/ConsLicitacao_Relacao.asp?numprp=&amp;dt_publ_ini=02/05/2018&amp;dt_publ_fim=02/05/2018&amp;chkModalidade=1,2,3,20,5,99&amp;chk_concor=31,32,41,42&amp;chk_pregao=1,2,3,4&amp;chk_rdc=1,2,3,4&amp;optTpPesqMat=M&amp;optTpPesqServ=S&amp;chkTodos=-1&amp;chk_concorTodos=-1&amp;chk_pregaoTodos=-1&amp;txtlstUf=&amp;txtlstMunicipio=&amp;txtlstUasg=&amp;txtlstGrpMaterial=&amp;txtlstClasMaterial=&amp;txtlstMaterial=&amp;txtlstGrpServico=&amp;txtlstServico=&amp;txtObjeto=&amp;numpag=1">
+							<input type="hidden" name="origem" value="1">
+							<a href="http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp#F2" name="hist_eventos" class="legenda" onclick="javascript:visualizarHistoricoEventos(document.Form2,&#39;?coduasg=160183&amp;modprp=5&amp;numprp=22018&#39;);" title="Visualizar histórico de eventos publicados para a licitação">Histórico de eventos publicados...</a>
+							<br><br>
+							<input type="button" name="itens" value="Itens e Download" class="texField2" onclick="javascript:VisualizarItens(document.Form2,&#39;?coduasg=160183&amp;modprp=5&amp;numprp=22018&#39;);" onmouseover="window.status=&#39;Itens da Licitação e Download do Edital&#39;;return true;" title="Clique para ver os itens ou para fazer o Download do Edital"> 
+					</td>
+				</tr>
+				</tbody></table>
+				
+					
+			
+					</a></form><form method="post" name="Form3"><a name="F2">
+					</a><a name="F3">
+					<table border="0" width="100%" class="td" cellpadding="1" cellspacing="1">
+					<tbody><tr>
+						<td>
+							<table width="100%">
+							<tbody><tr>
+								<td align="center" class="td_titulo_campo" nowrap="" style="WIDTH: 4%" width="4%" height="25">4</td>
+								<td align="center" class="td_titulo_campo" nowrap=""> Pelotas- RS</td>
+							</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr bgcolor="#FFFFFF" class="tex3">
+						<td style="padding:10px"><b>					
+							MINISTÉRIO DA DEFESA<br>Comando do Exército<br>Comando Militar do Sul<br>6ªDivisão de Exército<br>8ªBrigada de Infantaria Motorizada<br>9ºBatalhão de Infantaria Motorizado<br>Código da UASG: 160379<br></b><br><b>Pregão Eletrônico Nº 2/2018</b><br><b>Objeto:</b>&nbsp;Objeto: Pregão Eletrônico -  Serviço Comum de Engenharia - Adequação da Rede Elétrica do 9º Batalhão de Infantaria Motorizado (9º BIMtz).<br><b>Edital a partir de:</b>&nbsp;02/05/2018 das 08:00 às 12:00 Hs e das 13:30 às 17:00 Hs<br><b>Endereço:</b>&nbsp;Av Duque de Caxias, 344 - Bairro Fragata - Fragata - Pelotas (RS)<br><b>Telefone:</b>&nbsp;(0xx53) 33034044<br><b>Fax:</b>&nbsp;(0xx53)               <br><b>Entrega da Proposta:</b>&nbsp; a partir de 02/05/2018 às 08:00Hs<br><b>Abertura da Proposta:</b>&nbsp; em 14/05/2018 às 10:00Hs, no endereço: www.comprasnet.gov.br<br><br>					
+							<input type="hidden" name="urlOrigem" value="/ConsultaLicitacoes/ConsLicitacao_Relacao.asp?numprp=&amp;dt_publ_ini=02/05/2018&amp;dt_publ_fim=02/05/2018&amp;chkModalidade=1,2,3,20,5,99&amp;chk_concor=31,32,41,42&amp;chk_pregao=1,2,3,4&amp;chk_rdc=1,2,3,4&amp;optTpPesqMat=M&amp;optTpPesqServ=S&amp;chkTodos=-1&amp;chk_concorTodos=-1&amp;chk_pregaoTodos=-1&amp;txtlstUf=&amp;txtlstMunicipio=&amp;txtlstUasg=&amp;txtlstGrpMaterial=&amp;txtlstClasMaterial=&amp;txtlstMaterial=&amp;txtlstGrpServico=&amp;txtlstServico=&amp;txtObjeto=&amp;numpag=1">
+							<input type="hidden" name="origem" value="1">
+							<a href="http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp#F3" name="hist_eventos" class="legenda" onclick="javascript:visualizarHistoricoEventos(document.Form3,&#39;?coduasg=160379&amp;modprp=5&amp;numprp=22018&#39;);" title="Visualizar histórico de eventos publicados para a licitação">Histórico de eventos publicados...</a>
+							<br><br>
+							<input type="button" name="itens" value="Itens e Download" class="texField2" onclick="javascript:VisualizarItens(document.Form3,&#39;?coduasg=160379&amp;modprp=5&amp;numprp=22018&#39;);" onmouseover="window.status=&#39;Itens da Licitação e Download do Edital&#39;;return true;" title="Clique para ver os itens ou para fazer o Download do Edital"> 
+					</td>
+				</tr>
+				</tbody></table>
+				
+					
+			
+					</a></form><form method="post" name="Form4"><a name="F3">
+					</a><a name="F4">
+					<table border="0" width="100%" class="td" cellpadding="1" cellspacing="1">
+					<tbody><tr>
+						<td>
+							<table width="100%">
+							<tbody><tr>
+								<td align="center" class="td_titulo_campo" nowrap="" style="WIDTH: 4%" width="4%" height="25">5</td>
+								<td align="center" class="td_titulo_campo" nowrap=""> Maceió- AL</td>
+							</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr bgcolor="#FFFFFF" class="tex3">
+						<td style="padding:10px"><b>					
+							Agência de Modernização da Gestão de Processos<br>Código da UASG: 925998<br></b><br><b>Pregão Eletrônico Nº 11298/2017</b><br><b>Objeto:</b>&nbsp;Objeto: Pregão Eletrônico -  Aquisição de Materiais Elétricos.  ATENÇÃO: Srs. Licitantes, ao cadastrar a proposta no sistema ComprasNet, considerar somente a descrição dos itens contidos no Termo de Referência do Edital, sob pena de desclassificação.<br><b>Edital a partir de:</b>&nbsp;02/05/2018 das 08:00 às 14:00 Hs <br><b>Endereço:</b>&nbsp;Rua Manoel Nobre, Nº 281, Farol -  - Maceió (AL)<br><b>Telefone:</b>&nbsp;         <br><b>Fax:</b>&nbsp;               <br><b>Entrega da Proposta:</b>&nbsp; a partir de 02/05/2018 às 08:00Hs<br><b>Abertura da Proposta:</b>&nbsp; em 15/05/2018 às 09:00Hs, no endereço: www.comprasnet.gov.br<br><br>					
+							<input type="hidden" name="urlOrigem" value="/ConsultaLicitacoes/ConsLicitacao_Relacao.asp?numprp=&amp;dt_publ_ini=02/05/2018&amp;dt_publ_fim=02/05/2018&amp;chkModalidade=1,2,3,20,5,99&amp;chk_concor=31,32,41,42&amp;chk_pregao=1,2,3,4&amp;chk_rdc=1,2,3,4&amp;optTpPesqMat=M&amp;optTpPesqServ=S&amp;chkTodos=-1&amp;chk_concorTodos=-1&amp;chk_pregaoTodos=-1&amp;txtlstUf=&amp;txtlstMunicipio=&amp;txtlstUasg=&amp;txtlstGrpMaterial=&amp;txtlstClasMaterial=&amp;txtlstMaterial=&amp;txtlstGrpServico=&amp;txtlstServico=&amp;txtObjeto=&amp;numpag=1">
+							<input type="hidden" name="origem" value="1">
+							<a href="http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp#F4" name="hist_eventos" class="legenda" onclick="javascript:visualizarHistoricoEventos(document.Form4,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=112982017&#39;);" title="Visualizar histórico de eventos publicados para a licitação">Histórico de eventos publicados...</a>
+							<br><br>
+							<input type="button" name="itens" value="Itens e Download" class="texField2" onclick="javascript:VisualizarItens(document.Form4,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=112982017&#39;);" onmouseover="window.status=&#39;Itens da Licitação e Download do Edital&#39;;return true;" title="Clique para ver os itens ou para fazer o Download do Edital"> 
+					</td>
+				</tr>
+				</tbody></table>
+				
+					
+			
+					</a></form><form method="post" name="Form5"><a name="F4">
+					</a><a name="F5">
+					<table border="0" width="100%" class="td" cellpadding="1" cellspacing="1">
+					<tbody><tr>
+						<td>
+							<table width="100%">
+							<tbody><tr>
+								<td align="center" class="td_titulo_campo" nowrap="" style="WIDTH: 4%" width="4%" height="25">6</td>
+								<td align="center" class="td_titulo_campo" nowrap=""> Maceió- AL</td>
+							</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr bgcolor="#FFFFFF" class="tex3">
+						<td style="padding:10px"><b>					
+							Agência de Modernização da Gestão de Processos<br>Código da UASG: 925998<br></b><br><b>Pregão Eletrônico Nº 10279/2018</b><br><b>Objeto:</b>&nbsp;Objeto: Pregão Eletrônico -  A presente licitação objetiva o registro de preços para a AQUISIÇÃO DE MEDICAMENTOS (ANTI-INFLAMATÓRIOS E ANALGÉSICOS)   PLS Nº 028/2018<br><b>Edital a partir de:</b>&nbsp;02/05/2018 das 08:00 às 11:00 Hs e das 14:00 às 17:00 Hs<br><b>Endereço:</b>&nbsp;Rua Manoel Nobre, Nº 281, Farol -  - Maceió (AL)<br><b>Telefone:</b>&nbsp;(0xx82) 33153092<br><b>Fax:</b>&nbsp;(0xx82)               <br><b>Entrega da Proposta:</b>&nbsp; a partir de 02/05/2018 às 08:00Hs<br><b>Abertura da Proposta:</b>&nbsp; em 17/05/2018 às 14:00Hs, no endereço: www.comprasnet.gov.br<br><br>					
+							<input type="hidden" name="urlOrigem" value="/ConsultaLicitacoes/ConsLicitacao_Relacao.asp?numprp=&amp;dt_publ_ini=02/05/2018&amp;dt_publ_fim=02/05/2018&amp;chkModalidade=1,2,3,20,5,99&amp;chk_concor=31,32,41,42&amp;chk_pregao=1,2,3,4&amp;chk_rdc=1,2,3,4&amp;optTpPesqMat=M&amp;optTpPesqServ=S&amp;chkTodos=-1&amp;chk_concorTodos=-1&amp;chk_pregaoTodos=-1&amp;txtlstUf=&amp;txtlstMunicipio=&amp;txtlstUasg=&amp;txtlstGrpMaterial=&amp;txtlstClasMaterial=&amp;txtlstMaterial=&amp;txtlstGrpServico=&amp;txtlstServico=&amp;txtObjeto=&amp;numpag=1">
+							<input type="hidden" name="origem" value="1">
+							<a href="http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp#F5" name="hist_eventos" class="legenda" onclick="javascript:visualizarHistoricoEventos(document.Form5,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=102792018&#39;);" title="Visualizar histórico de eventos publicados para a licitação">Histórico de eventos publicados...</a>
+							<br><br>
+							<input type="button" name="itens" value="Itens e Download" class="texField2" onclick="javascript:VisualizarItens(document.Form5,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=102792018&#39;);" onmouseover="window.status=&#39;Itens da Licitação e Download do Edital&#39;;return true;" title="Clique para ver os itens ou para fazer o Download do Edital"> 
+					</td>
+				</tr>
+				</tbody></table>
+				
+					
+			
+					</a></form><form method="post" name="Form6"><a name="F5">
+					</a><a name="F6">
+					<table border="0" width="100%" class="td" cellpadding="1" cellspacing="1">
+					<tbody><tr>
+						<td>
+							<table width="100%">
+							<tbody><tr>
+								<td align="center" class="td_titulo_campo" nowrap="" style="WIDTH: 4%" width="4%" height="25">7</td>
+								<td align="center" class="td_titulo_campo" nowrap=""> Maceió- AL</td>
+							</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr bgcolor="#FFFFFF" class="tex3">
+						<td style="padding:10px"><b>					
+							Agência de Modernização da Gestão de Processos<br>Código da UASG: 925998<br></b><br><b>Pregão Eletrônico Nº 10277/2018</b><br><b>Objeto:</b>&nbsp;Objeto: Pregão Eletrônico -  A presente licitação tem por objeto a AQUISIÇÃO DE GÊNEROS ALIMENTÍCIOS  (MOLHOS E CONDIMENTOS)   PLS Nº 054/2017<br><b>Edital a partir de:</b>&nbsp;02/05/2018 das 08:00 às 11:00 Hs e das 14:00 às 17:00 Hs<br><b>Endereço:</b>&nbsp;Rua Manoel Nobre, Nº 281, Farol -  - Maceió (AL)<br><b>Telefone:</b>&nbsp;(0xx82) 99181712<br><b>Fax:</b>&nbsp;(0xx82)               <br><b>Entrega da Proposta:</b>&nbsp; a partir de 02/05/2018 às 08:00Hs<br><b>Abertura da Proposta:</b>&nbsp; em 17/05/2018 às 14:00Hs, no endereço: www.comprasnet.gov.br<br><br>					
+							<input type="hidden" name="urlOrigem" value="/ConsultaLicitacoes/ConsLicitacao_Relacao.asp?numprp=&amp;dt_publ_ini=02/05/2018&amp;dt_publ_fim=02/05/2018&amp;chkModalidade=1,2,3,20,5,99&amp;chk_concor=31,32,41,42&amp;chk_pregao=1,2,3,4&amp;chk_rdc=1,2,3,4&amp;optTpPesqMat=M&amp;optTpPesqServ=S&amp;chkTodos=-1&amp;chk_concorTodos=-1&amp;chk_pregaoTodos=-1&amp;txtlstUf=&amp;txtlstMunicipio=&amp;txtlstUasg=&amp;txtlstGrpMaterial=&amp;txtlstClasMaterial=&amp;txtlstMaterial=&amp;txtlstGrpServico=&amp;txtlstServico=&amp;txtObjeto=&amp;numpag=1">
+							<input type="hidden" name="origem" value="1">
+							<a href="http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp#F6" name="hist_eventos" class="legenda" onclick="javascript:visualizarHistoricoEventos(document.Form6,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=102772018&#39;);" title="Visualizar histórico de eventos publicados para a licitação">Histórico de eventos publicados...</a>
+							<br><br>
+							<input type="button" name="itens" value="Itens e Download" class="texField2" onclick="javascript:VisualizarItens(document.Form6,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=102772018&#39;);" onmouseover="window.status=&#39;Itens da Licitação e Download do Edital&#39;;return true;" title="Clique para ver os itens ou para fazer o Download do Edital"> 
+					</td>
+				</tr>
+				</tbody></table>
+				
+					
+			
+					</a></form><form method="post" name="Form7"><a name="F6">
+					</a><a name="F7">
+					<table border="0" width="100%" class="td" cellpadding="1" cellspacing="1">
+					<tbody><tr>
+						<td>
+							<table width="100%">
+							<tbody><tr>
+								<td align="center" class="td_titulo_campo" nowrap="" style="WIDTH: 4%" width="4%" height="25">8</td>
+								<td align="center" class="td_titulo_campo" nowrap=""> Maceió- AL</td>
+							</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr bgcolor="#FFFFFF" class="tex3">
+						<td style="padding:10px"><b>					
+							Agência de Modernização da Gestão de Processos<br>Código da UASG: 925998<br></b><br><b>Pregão Eletrônico Nº 10275/2018</b><br><b>Objeto:</b>&nbsp;Objeto: Pregão Eletrônico -  A presente licitação objetiva o registro de preços para a AQUISIÇÃO DE EMBALAGEM DE ALUMÍNIO - PLS N¨ 026-2016 EXCLUSIVO<br><b>Edital a partir de:</b>&nbsp;02/05/2018 das 08:00 às 14:00 Hs <br><b>Endereço:</b>&nbsp;Rua Manoel Nobre, Nº 281, Farol -  - Maceió (AL)<br><b>Telefone:</b>&nbsp;         <br><b>Fax:</b>&nbsp;               <br><b>Entrega da Proposta:</b>&nbsp; a partir de 02/05/2018 às 08:00Hs<br><b>Abertura da Proposta:</b>&nbsp; em 16/05/2018 às 09:00Hs, no endereço: www.comprasnet.gov.br<br><br>					
+							<input type="hidden" name="urlOrigem" value="/ConsultaLicitacoes/ConsLicitacao_Relacao.asp?numprp=&amp;dt_publ_ini=02/05/2018&amp;dt_publ_fim=02/05/2018&amp;chkModalidade=1,2,3,20,5,99&amp;chk_concor=31,32,41,42&amp;chk_pregao=1,2,3,4&amp;chk_rdc=1,2,3,4&amp;optTpPesqMat=M&amp;optTpPesqServ=S&amp;chkTodos=-1&amp;chk_concorTodos=-1&amp;chk_pregaoTodos=-1&amp;txtlstUf=&amp;txtlstMunicipio=&amp;txtlstUasg=&amp;txtlstGrpMaterial=&amp;txtlstClasMaterial=&amp;txtlstMaterial=&amp;txtlstGrpServico=&amp;txtlstServico=&amp;txtObjeto=&amp;numpag=1">
+							<input type="hidden" name="origem" value="1">
+							<a href="http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp#F7" name="hist_eventos" class="legenda" onclick="javascript:visualizarHistoricoEventos(document.Form7,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=102752018&#39;);" title="Visualizar histórico de eventos publicados para a licitação">Histórico de eventos publicados...</a>
+							<br><br>
+							<input type="button" name="itens" value="Itens e Download" class="texField2" onclick="javascript:VisualizarItens(document.Form7,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=102752018&#39;);" onmouseover="window.status=&#39;Itens da Licitação e Download do Edital&#39;;return true;" title="Clique para ver os itens ou para fazer o Download do Edital"> 
+					</td>
+				</tr>
+				</tbody></table>
+				
+					
+			
+					</a></form><form method="post" name="Form8"><a name="F7">
+					</a><a name="F8">
+					<table border="0" width="100%" class="td" cellpadding="1" cellspacing="1">
+					<tbody><tr>
+						<td>
+							<table width="100%">
+							<tbody><tr>
+								<td align="center" class="td_titulo_campo" nowrap="" style="WIDTH: 4%" width="4%" height="25">9</td>
+								<td align="center" class="td_titulo_campo" nowrap=""> Maceió- AL</td>
+							</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr bgcolor="#FFFFFF" class="tex3">
+						<td style="padding:10px"><b>					
+							Agência de Modernização da Gestão de Processos<br>Código da UASG: 925998<br></b><br><b>Pregão Eletrônico Nº 10269/2018</b><br><b>Objeto:</b>&nbsp;Objeto: Pregão Eletrônico -  Aquisição de materiais de consumo para utilização no Laboratório de Microbiologia e Tuberculose.<br><b>Edital a partir de:</b>&nbsp;02/05/2018 das 08:00 às 14:00 Hs <br><b>Endereço:</b>&nbsp;Rua Manoel Nobre, Nº 281, Farol -  - Maceió (AL)<br><b>Telefone:</b>&nbsp;         <br><b>Fax:</b>&nbsp;               <br><b>Entrega da Proposta:</b>&nbsp; a partir de 02/05/2018 às 08:00Hs<br><b>Abertura da Proposta:</b>&nbsp; em 15/05/2018 às 09:00Hs, no endereço: www.comprasnet.gov.br<br><br>					
+							<input type="hidden" name="urlOrigem" value="/ConsultaLicitacoes/ConsLicitacao_Relacao.asp?numprp=&amp;dt_publ_ini=02/05/2018&amp;dt_publ_fim=02/05/2018&amp;chkModalidade=1,2,3,20,5,99&amp;chk_concor=31,32,41,42&amp;chk_pregao=1,2,3,4&amp;chk_rdc=1,2,3,4&amp;optTpPesqMat=M&amp;optTpPesqServ=S&amp;chkTodos=-1&amp;chk_concorTodos=-1&amp;chk_pregaoTodos=-1&amp;txtlstUf=&amp;txtlstMunicipio=&amp;txtlstUasg=&amp;txtlstGrpMaterial=&amp;txtlstClasMaterial=&amp;txtlstMaterial=&amp;txtlstGrpServico=&amp;txtlstServico=&amp;txtObjeto=&amp;numpag=1">
+							<input type="hidden" name="origem" value="1">
+							<a href="http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp#F8" name="hist_eventos" class="legenda" onclick="javascript:visualizarHistoricoEventos(document.Form8,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=102692018&#39;);" title="Visualizar histórico de eventos publicados para a licitação">Histórico de eventos publicados...</a>
+							<br><br>
+							<input type="button" name="itens" value="Itens e Download" class="texField2" onclick="javascript:VisualizarItens(document.Form8,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=102692018&#39;);" onmouseover="window.status=&#39;Itens da Licitação e Download do Edital&#39;;return true;" title="Clique para ver os itens ou para fazer o Download do Edital"> 
+					</td>
+				</tr>
+				</tbody></table>
+				
+					
+			
+					</a></form><form method="post" name="Form9"><a name="F8">
+					</a><a name="F9">
+					<table border="0" width="100%" class="td" cellpadding="1" cellspacing="1">
+					<tbody><tr>
+						<td>
+							<table width="100%">
+							<tbody><tr>
+								<td align="center" class="td_titulo_campo" nowrap="" style="WIDTH: 4%" width="4%" height="25">10</td>
+								<td align="center" class="td_titulo_campo" nowrap=""> Maceió- AL</td>
+							</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr bgcolor="#FFFFFF" class="tex3">
+						<td style="padding:10px"><b>					
+							Agência de Modernização da Gestão de Processos<br>Código da UASG: 925998<br></b><br><b>Pregão Eletrônico Nº 10266/2018</b><br><b>Objeto:</b>&nbsp;Objeto: Pregão Eletrônico -  Aquisição de equipamento médico hospitalares<br><b>Edital a partir de:</b>&nbsp;02/05/2018 das 08:00 às 14:00 Hs <br><b>Endereço:</b>&nbsp;Rua Manoel Nobre, Nº 281, Farol -  - Maceió (AL)<br><b>Telefone:</b>&nbsp;         <br><b>Fax:</b>&nbsp;               <br><b>Entrega da Proposta:</b>&nbsp; a partir de 02/05/2018 às 08:00Hs<br><b>Abertura da Proposta:</b>&nbsp; em 15/05/2018 às 14:00Hs, no endereço: www.comprasnet.gov.br<br><br>					
+							<input type="hidden" name="urlOrigem" value="/ConsultaLicitacoes/ConsLicitacao_Relacao.asp?numprp=&amp;dt_publ_ini=02/05/2018&amp;dt_publ_fim=02/05/2018&amp;chkModalidade=1,2,3,20,5,99&amp;chk_concor=31,32,41,42&amp;chk_pregao=1,2,3,4&amp;chk_rdc=1,2,3,4&amp;optTpPesqMat=M&amp;optTpPesqServ=S&amp;chkTodos=-1&amp;chk_concorTodos=-1&amp;chk_pregaoTodos=-1&amp;txtlstUf=&amp;txtlstMunicipio=&amp;txtlstUasg=&amp;txtlstGrpMaterial=&amp;txtlstClasMaterial=&amp;txtlstMaterial=&amp;txtlstGrpServico=&amp;txtlstServico=&amp;txtObjeto=&amp;numpag=1">
+							<input type="hidden" name="origem" value="1">
+							<a href="http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp#F9" name="hist_eventos" class="legenda" onclick="javascript:visualizarHistoricoEventos(document.Form9,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=102662018&#39;);" title="Visualizar histórico de eventos publicados para a licitação">Histórico de eventos publicados...</a>
+							<br><br>
+							<input type="button" name="itens" value="Itens e Download" class="texField2" onclick="javascript:VisualizarItens(document.Form9,&#39;?coduasg=925998&amp;modprp=5&amp;numprp=102662018&#39;);" onmouseover="window.status=&#39;Itens da Licitação e Download do Edital&#39;;return true;" title="Clique para ver os itens ou para fazer o Download do Edital"> 
+					</td>
+				</tr>
+				</tbody></table>
+				
+					
+	
+				<table cellspacing="2" cellpadding="2" width="100%" border="0" align="center">
+				<tbody><tr>
+					<td class="td_titulo_campo" nowrap=""><center>(Licitações 1-10 de 183) </center></td>
+				</tr>
+				<tr>
+					<td nowrap="">											
+						<p align="center">
+							<input type="button" name="Pesquisa" value="Nova Pesquisa" class="texField2" onclick="Voltar();">&nbsp;
+						
+								<input type="button" id="proximo" name="btn_proximo" value="Avançar" class="texField2" onclick="Navegacao(2);">
+							
+						</p>
+							
+					</td>
+				</tr>
+				</tbody></table>
+		
+		</a></form></td>
+	</tr>
+	</tbody></table>
+
+
+<div id="feedly-mini" title="feedly Mini tookit"></div></body></html>

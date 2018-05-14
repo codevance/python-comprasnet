@@ -1,6 +1,12 @@
-from comprasnet import ComprasNet
-from unittest import mock
+import codecs
+import os
+from collections import namedtuple
 from datetime import datetime
+from unittest import mock
+
+import requests
+
+from comprasnet import ComprasNet
 
 
 def test_should_return_attributes():
@@ -22,15 +28,44 @@ def test_should_return_correct_dict_structure():
 
 @mock.patch('comprasnet.ComprasNet.get_search_result_page')
 def test_should_search_auctions_by_date(get_search_result_page):
-    get_search_result_page.return_value = ('/tmp/test.html', True)
+    get_search_result_page.return_value = ([{'codigo_da_uasg': '160053', 'pregao_eletronico':
+        '22018'}, {'codigo_da_uasg': '160232', 'pregao_eletronico': '32018'}], True)
     comprasnet = ComprasNet()
 
-    filenames = comprasnet.search_auctions_by_date(datetime.now())
-    assert filenames == ['/tmp/test.html']
+    results = comprasnet.search_auctions_by_date(datetime.now())
+    assert results == [{'codigo_da_uasg': '160053', 'pregao_eletronico':
+        '22018'}, {'codigo_da_uasg': '160232', 'pregao_eletronico': '32018'}]
     assert get_search_result_page.called_with(comprasnet.SEARCH_BIDS_URL,
                                               comprasnet.get_data_dict_to_search_auctions())
 
 
-@mock.patch('requests.get')
-def test_should_retrive_and_save_search_auctions_results(get):
-    assert False
+@mock.patch('comprasnet.requests.get')
+def test_should_search_auctions_by_date(get):
+    filename = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            'assets/result_page_sample.html')
+    with codecs.open(filename, 'r', 'iso-8859-1') as handle:
+        page_result_content = handle.read()
+
+    MockResponse = namedtuple('Response', 'status_code, text')
+    MockResponse.status_code = requests.codes.ok
+    MockResponse.text = page_result_content
+    get.return_value = MockResponse
+
+    comprasnet = ComprasNet()
+    page_results, is_last = comprasnet.get_search_result_page({
+        'dt_publ_ini': 'foo',
+        'numpag': 'foo',
+    })
+    assert is_last is False
+    assert page_results == [{'codigo_da_uasg': '160447', 'pregao_eletronico': '122018'},
+                            {'codigo_da_uasg': '160228', 'pregao_eletronico': '112018'},
+                            {'codigo_da_uasg': '160183', 'pregao_eletronico': '22018'},
+                            {'codigo_da_uasg': '160379', 'pregao_eletronico': '22018'},
+                            {'codigo_da_uasg': '925998', 'pregao_eletronico': '112982017'},
+                            {'codigo_da_uasg': '925998', 'pregao_eletronico': '102792018'},
+                            {'codigo_da_uasg': '925998', 'pregao_eletronico': '102772018'},
+                            {'codigo_da_uasg': '925998', 'pregao_eletronico': '102752018'},
+                            {'codigo_da_uasg': '925998', 'pregao_eletronico': '102692018'},
+                            {'codigo_da_uasg': '925998', 'pregao_eletronico': '102662018'}]
+
+    assert get.called_with((comprasnet.SEARCH_BIDS_URL, {'foo': 'bar'}))

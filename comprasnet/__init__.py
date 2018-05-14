@@ -1,9 +1,8 @@
-import requests
-from datetime import datetime, date
-import logging
 import logging.config
-import os
-from uuid import uuid4
+from datetime import datetime, date, timedelta
+
+import requests
+from bs4 import BeautifulSoup
 
 log = logging.getLogger('comprasnet')
 
@@ -44,7 +43,7 @@ class ComprasNet:
     def search_auctions_by_date(self, search_date):
         """Search auctions only by date, retrieve and save page results in tmp directory and return
         a list of filenames saved."""
-        filenames = []
+        results = []
 
         page = 0
         data = self.get_data_dict_to_search_auctions()
@@ -59,35 +58,54 @@ class ComprasNet:
             data['numpag'] = page
 
             log.debug('getting page {:04d}...'.format(page))
-            filename, is_last_page = self.get_search_result_page(data)
-            filenames.append(filename)
+            page_results, is_last_page = self.get_search_result_page(data)
+            results += page_results
             if is_last_page:
                 break
 
-        return filenames
+        return results
 
     def get_search_result_page(self, data):
         """Receive data dict, make the request and retrive search page. Save page and returns a
         tuple with filename and if is the last page"""
         is_last_page = False
+        page_results = []
 
         response = requests.get(self.SEARCH_BIDS_URL, data)
-        if not response.status_code == 200:
+        print(str(response.status_code))
+        if not response.status_code == requests.codes.ok:
             log.error('error trying to get auctions from {}, page {}. Status code: {}'.format(
                 data['dt_publ_ini'], data['numpag'], response.status_code
             ))
             return None, is_last_page
 
-        filename = os.path.join(self.TMP_DIR, '{}.html'.format(uuid4()))
-        log.debug('saving page in {}...'.format(filename))
-        with open(filename, 'w') as handle:
-            handle.write(response.text)
+        bs_object = BeautifulSoup(response.text, "html.parser")
+        for form in bs_object.find_all('form'):
+            if 'Form' not in form.attrs['name']:
+                continue
+
+            current_result = {}
+            td = form.find('tr', class_="tex3").find('td')
+
+            for line in str(td).split("<br/>"):
+                if 'digo da UASG' in line:
+                    codigo_da_uasg = line.split("digo da UASG: ")[-1].strip()
+                    current_result['codigo_da_uasg'] = codigo_da_uasg
+
+                if 'Pregão Eletrônico Nº' in line:
+                    pregao_eletronico = line.split("Pregão Eletrônico Nº ")[-1].strip()
+                    pregao_eletronico = pregao_eletronico.replace('/', '')
+                    pregao_eletronico = pregao_eletronico.replace('<b>', '')
+                    pregao_eletronico = pregao_eletronico.replace('</b>', '')
+                    current_result['pregao_eletronico'] = pregao_eletronico
+
+            page_results.append(current_result)
 
         if not 'id="proximo" name="btn_proximo"' in response.text:
             log.info('finished!')
             is_last_page = True
 
-        return filename, is_last_page
+        return page_results, is_last_page
 
 
 if __name__ == '__main__':
@@ -115,4 +133,5 @@ if __name__ == '__main__':
     })
 
     comprasnet = ComprasNet()
-    comprasnet.search_auctions_by_date(datetime.now())
+    results = comprasnet.search_auctions_by_date(datetime.now() - timedelta(days=3))
+    print(results)
