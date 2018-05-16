@@ -63,7 +63,7 @@ def test_get_data_auctions_pages(get):
                                 'objeto': 'Pregão Eletrônico -  Aquisição de '
                                 'Material de Acondicionamento e Embalagens',
                                 'edital-a-partir-de-str': '02/05/2018',
-                                'edital-a-partir-de': datetime.date(2018, 5, 2)
+                                'edital-a-partir-de': date(2018, 5, 2)
                             }, {
                                 'codigo-da-uasg': '160183',
                                 'pregao-eletronico': '22018',
@@ -74,7 +74,7 @@ def test_get_data_auctions_pages(get):
                                 'informatizado e utilização de cartão '
                                 'eletrônico ou magnético.',
                                 'edital-a-partir-de-str': '02/05/2018',
-                                'edital-a-partir-de': datetime.date(2018, 5, 2)
+                                'edital-a-partir-de': date(2018, 5, 2)
                             }]
 @mock.patch('comprasnet.requests.get')
 def test_should_search_auctions_by_date(get):
