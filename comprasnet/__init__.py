@@ -3,6 +3,7 @@ from datetime import datetime, date, timedelta
 
 import requests
 from bs4 import BeautifulSoup
+import sys
 
 log = logging.getLogger('comprasnet')
 
@@ -107,31 +108,3 @@ class ComprasNet:
 
         return page_results, is_last_page
 
-
-if __name__ == '__main__':
-    logging.config.dictConfig({
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'standard': {
-                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-            },
-        },
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-                'formatter': 'standard',
-            },
-        },
-        'loggers': {
-            '': {
-                'level': 'DEBUG',
-                'handlers': ['console'],
-                'propagate': False
-            },
-        },
-    })
-
-    comprasnet = ComprasNet()
-    results = comprasnet.search_auctions_by_date(datetime.now() - timedelta(days=3))
-    print(results)
