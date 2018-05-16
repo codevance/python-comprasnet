@@ -1,9 +1,10 @@
 import logging.config
-from datetime import datetime, date, timedelta
+from datetime import date
 
 import requests
 from bs4 import BeautifulSoup
-import sys
+
+from .api import ComprasNetApi
 
 log = logging.getLogger('comprasnet')
 
@@ -107,4 +108,3 @@ class ComprasNet:
             is_last_page = True
 
         return page_results, is_last_page
-
