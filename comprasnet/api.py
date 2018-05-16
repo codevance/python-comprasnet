@@ -31,8 +31,14 @@ class ComprasNetApi:
         return self._raw_request(url, **params)
 
     def get_licitacoes_uasg(self, uasg_id, **params):
-        """http://compras.dados.gov.br/docs/licitacoes/v1/uasgs.html"""
+        """http://compras.dados.gov.br/docs/licitacoes/uasg.html"""
         response = self._request_detail('licitacoes', 'uasg', uasg_id, **params)
+        if response.status_code == 200:
+            return response.json()
+
+    def get_licitacoes_uasgs(self, **params):
+        """http://compras.dados.gov.br/docs/licitacoes/v1/uasgs.html"""
+        response = self._request_search('licitacoes', 'uasgs', **params)
         if response.status_code == 200:
             return response.json()
 

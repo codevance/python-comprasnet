@@ -53,3 +53,11 @@ def test_method_get_licitacoes_uasg(_request_detail):
     comprasnet_api.get_licitacoes_uasg('123456', foo=1)
 
     assert _request_detail.called_with('licitacoes', 'uasg', '123456', foo=1)
+
+@mock.patch('comprasnet.api.ComprasNetApi._request_search')
+def test_method_get_licitacoes_uasg(_request_search):
+    comprasnet_api = ComprasNetApi()
+    comprasnet_api.get_licitacoes_uasgs(foo=1)
+
+    assert _request_search.called_with('licitacoes', 'uasgs', foo=1)
+
