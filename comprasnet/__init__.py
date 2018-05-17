@@ -1,7 +1,7 @@
-import logging.config
-from datetime import date, datetime
-import re
+import logging
+from datetime import datetime
 
+import math
 import requests
 from bs4 import BeautifulSoup
 from slugify import slugify
@@ -12,18 +12,48 @@ from .api import ComprasNetApi
 log = logging.getLogger('comprasnet')
 
 
-class ComprasNet:
-    TMP_DIR = '/tmp/'
-    SEARCH_BIDS_URL = "http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp"
+class SearchAuctions:
+    """Handle with this search: http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Filtro
+    .asp"""
 
-    def __init__(self):
-        pass
+    SEARCH_URL = "http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Relacao.asp"
+    OFFSET = 10
 
-    def get_data_dict_to_search_auctions(self):
+    def __init__(self, day=datetime.today(), **kwargs):
+        self.day = day
+        self.total_results = 0
+        self.current_page = 1
+
+    @property
+    def total_pages(self):
+        """Return total of pages based on attributes information"""
+        return math.ceil(self.total_results / self.OFFSET)
+
+    @property
+    def is_done(self):
+        return self.current_page > self.total_pages
+
+    @property
+    def results(self):
+        """Generator that return each page result on every iteration."""
+        while not self.is_done:
+            data = self.get_search_page_data()
+            if data:
+                yield self.scrap_search_page(data)
+                self.current_page += 1
+        self.current_page = 1
+
+    def search(self):
+        """method that starts class logic. After this method, itarate over `restults` property to
+        get the class results"""
+        self.get_search_metadata()
+
+    def get_search_params(self):
+        """mount the POST params dict to send to request"""
         return {
             "numprp": "",
-            "dt_publ_ini": None,
-            "dt_publ_fim": None,
+            "dt_publ_ini": self.day.strftime("%d/%m/%Y"),
+            "dt_publ_fim": self.day.strftime("%d/%m/%Y"),
             "chkModalidade": "1,2,3,20,5,99",
             "chk_concor": "",
             "chk_pregao": "",
@@ -42,24 +72,54 @@ class ComprasNet:
             "txtlstGrpServico": "",
             "txtlstServico": "",
             "txtObjeto": "",
-            "numpag": 1,
+            "numpag": self.current_page,
         }
 
-    def get_data_auctions_pages(self, data):
-        """ Gets data from results page of auctions search and
-            retrieve a dict with scrapped informations.
-        """
-        is_last_page = False
-        page_results = []
+    def get_search_metadata(self):
+        """Retrieve informations about the search to mount all class logic. In practice,
+        its the start command."""
+        log.info('getting informations from auctions from {:%d/%m/%Y}...'.format(self.day))
+        data = self.get_search_params()
 
-        response = requests.get(self.SEARCH_BIDS_URL, data)
+        response = requests.get(self.SEARCH_URL, data)
         if not response.status_code == requests.codes.ok:
             log.error('error trying to get auctions from {}, page {}. Status code: {}'.format(
                 data['dt_publ_ini'], data['numpag'], response.status_code
             ))
-            return None, is_last_page
+            return
 
-        bs_object = BeautifulSoup(response.text, "html.parser")
+        bs_object = BeautifulSoup(response.text, 'html.parser')
+        footer = None
+        for item in bs_object.find_all('td', class_='td_titulo_campo'):
+            if '(Licita' in str(item):
+                footer = item.find('center').text
+
+        if footer:
+            total_results = footer.split(' de ')[-1]
+            self.total_results = int(total_results.replace(')', ''))
+
+    def get_search_page_data(self):
+        """Retrieve raw html from current page."""
+        log.info('getting auctions from {:%d/%m/%Y}, page {}...'.format(self.day,
+                                                                        self.current_page))
+
+        data = self.get_search_params()
+        response = requests.get(self.SEARCH_URL, data)
+        if not response.status_code == requests.codes.ok:
+            log.error('error trying to get auctions from {}, page {}. Status code: {}'.format(
+                data['dt_publ_ini'], data['numpag'], response.status_code
+            ))
+            return
+
+        return response.text
+
+    def scrap_search_page(self, data):
+        """ Gets data from results page of auctions search and
+            retrieve a dict with scrapped informations.
+        """
+        page_results = []
+
+        bs_object = BeautifulSoup(data, "html.parser")
         header = []
         for form in bs_object.find_all('form'):
             if 'Form' not in form.attrs['name']:
@@ -227,75 +287,4 @@ class ComprasNet:
                         pass
 
             page_results.append(current_result)
-
-        if not 'id="proximo" name="btn_proximo"' in response.text:
-            log.info('finished!')
-            is_last_page = True
-        return page_results, is_last_page
-
-    def search_auctions_by_date(self, search_date):
-        """Search auctions only by date, retrieve and save page results in tmp directory and return
-        a list of filenames saved."""
-        results = []
-
-        page = 0
-        data = self.get_data_dict_to_search_auctions()
-        if not isinstance(search_date, date):
-            search_date = search_date.date()
-
-        log.info('getting auctions from {:%d/%m/%Y}...'.format(search_date))
-        while True:
-            page += 1
-            data['dt_publ_ini'] = search_date.strftime("%d/%m/%Y")
-            data['dt_publ_fim'] = search_date.strftime("%d/%m/%Y")
-            data['numpag'] = page
-
-            log.debug('getting page {:04d}...'.format(page))
-            # page_results, is_last_page = self.get_search_result_page(data)
-            page_results, is_last_page = self.get_data_auctions_pages(data)
-            results += page_results
-            if is_last_page:
-                break
-
-        return results
-
-    def get_search_result_page(self, data):
-        """Receive data dict, make the request and retrive search page. Save page and returns a
-        tuple with filename and if is the last page"""
-        is_last_page = False
-        page_results = []
-
-        response = requests.get(self.SEARCH_BIDS_URL, data)
-        if not response.status_code == requests.codes.ok:
-            log.error('error trying to get auctions from {}, page {}. Status code: {}'.format(
-                data['dt_publ_ini'], data['numpag'], response.status_code
-            ))
-            return None, is_last_page
-
-        bs_object = BeautifulSoup(response.text, "html.parser")
-        for form in bs_object.find_all('form'):
-            if 'Form' not in form.attrs['name']:
-                continue
-
-            current_result = {}
-            td = form.find('tr', class_="tex3").find('td')
-
-            for line in str(td).split("<br/>"):
-                if 'digo da UASG' in line:
-                    codigo_da_uasg = line.split("digo da UASG: ")[-1].strip()
-                    current_result['codigo_da_uasg'] = codigo_da_uasg
-
-                if 'Pregão Eletrônico Nº' in line:
-                    pregao_eletronico = line.split("Pregão Eletrônico Nº ")[-1].strip()
-                    pregao_eletronico = pregao_eletronico.replace('/', '')
-                    pregao_eletronico = pregao_eletronico.replace('<b>', '')
-                    pregao_eletronico = pregao_eletronico.replace('</b>', '')
-                    current_result['pregao_eletronico'] = pregao_eletronico
-
-            page_results.append(current_result)
-
-        if not 'id="proximo" name="btn_proximo"' in response.text:
-            log.info('finished!')
-            is_last_page = True
-
-        return page_results, is_last_page
+        return page_results
