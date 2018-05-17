@@ -1,10 +1,12 @@
 import logging.config
-from datetime import datetime, date, timedelta
-from unicodedata import normalize
+from datetime import date, datetime
 
 import requests
 from bs4 import BeautifulSoup
 from slugify import slugify
+from unicodedata import normalize
+
+from .api import ComprasNetApi
 
 log = logging.getLogger('comprasnet')
 
@@ -149,7 +151,7 @@ class ComprasNet:
                         fax_valor = fax_valor.replace('0xx', '')
                     else:
                         fax_valor = None
-                    
+
                     current_result[fax_chave] = fax_valor
                     print(current_result)
 
@@ -253,33 +255,3 @@ class ComprasNet:
             is_last_page = True
 
         return page_results, is_last_page
-
-
-if __name__ == '__main__':
-    logging.config.dictConfig({
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'standard': {
-                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-            },
-        },
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-                'formatter': 'standard',
-            },
-        },
-        'loggers': {
-            '': {
-                'level': 'DEBUG',
-                'handlers': ['console'],
-                'propagate': False
-            },
-        },
-    })
-
-    comprasnet = ComprasNet()
-    # results = comprasnet.search_auctions_by_date(datetime.now() - timedelta(days=3))
-    results_auction_info = comprasnet.search_auctions_by_date(datetime.now() - timedelta(days=1))
-    print(results_auction_info)
