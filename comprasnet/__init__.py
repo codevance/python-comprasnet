@@ -66,9 +66,19 @@ class ComprasNet:
             current_result = {}
             td = form.find('tr', class_="tex3").find('td')
 
+            titulo_td = form.find_all('td', class_="td_titulo_campo")[1]
+            cidade = str(titulo_td).split()[-2]
+            cidade = cidade.strip('-')
+            uf = str(titulo_td).split()[-1]
+            uf = uf.strip('</td>')
+
+            current_result['cidade'] = cidade
+            current_result['uf'] = uf
+
             for line in str(td).split("<br/>"):
 
                 if 'digo da UASG' in line:
+                    current_result['cabecalho'] = header
                     codigo_da_uasg_chave = line.split(":")[0]
                     codigo_da_uasg_chave = slugify(codigo_da_uasg_chave)
                     codigo_da_uasg_valor = line.split("digo da UASG: ")[-1].strip()
@@ -85,8 +95,8 @@ class ComprasNet:
 
                 if 'Objeto:' in line:
                     objeto_chave = line.split()[1].split(':')[0].lower()
-                    object_value = line.split('Objeto:')[-1].strip()
-                    current_result[objeto_chave] = object_value
+                    objeto_valor = line.split('Objeto:')[-1].strip()
+                    current_result[objeto_chave] = objeto_valor
 
                 if 'Edital a partir de' in line:
                     edital_a_partir_de = line.split(':')[1].strip()
@@ -100,26 +110,80 @@ class ComprasNet:
                     current_result['edital-a-partir-de'] = edital_a_partir_de_data
 
                 if 'Endereço' in line:
-                    # import pdb; pdb.set_trace()
-                    print(line)
+                    endereco_chave = line.split()[0].strip('<b>')
+                    endereco_chave = endereco_chave.split(':</')[0]
+                    endereco_chave = slugify(endereco_chave)
+                    endereco_valor = line.split(':')[1]
+                    endereco_valor = endereco_valor.split('</b>')[1]
+                    endereco_valor = normalize('NFKD', endereco_valor)
+                    current_result[endereco_chave] = endereco_valor
+                    print(current_result)
 
                 if 'Telefone' in line:
-                    # import pdb; pdb.set_trace()
-                    print(line)
+                    telefone_chave = line.split(':')[0]
+                    telefone_chave = telefone_chave.split('<b>')[1]
+                    telefone_chave = slugify(telefone_chave)
+                    telefone_valor = line.split(':')[1]
+
+                    if telefone_valor:
+                        telefone_valor = telefone_valor.split('</b>')[1]
+                        telefone_valor = normalize('NFKD', telefone_valor)
+                        telefone_valor = telefone_valor.strip(' ')
+                        telefone_valor = telefone_valor.replace('0xx', '')
+                    else:
+                        telefone_valor = None
+
+                    current_result[telefone_chave] = telefone_valor
+
+                if 'Fax' in line:
+                    fax_chave = line.split(':')[0]
+                    fax_chave = fax_chave.split('<b>')[1]
+                    fax_chave = slugify(fax_chave)
+                    fax_valor = line.split(':')[1]
+
+                    if fax_valor:
+                        fax_valor = fax_valor.split('</b>')[1]
+                        fax_valor = fax_valor.replace(' ', '')
+                        fax_valor = normalize('NFKD', fax_valor)
+                        fax_valor = fax_valor.replace(' ', '')
+                        fax_valor = fax_valor.replace('0xx', '')
+                    else:
+                        fax_valor = None
+                    
+                    current_result[fax_chave] = fax_valor
+                    print(current_result)
+
                 if 'Entrega da Proposta' in line:
-                    # import pdb; pdb.set_trace()
-                    print(line)
+                    entrega_proposta_chave = line.split(':')[0]
+                    entrega_proposta_chave = entrega_proposta_chave.split('<b>')[1]
+                    entrega_proposta_chave = slugify(entrega_proposta_chave)
+                    entrega_proposta_chave_str = '{}{}'.format(entrega_proposta_chave, '-str')
+
+                    entrega_proposta_valor = line.split(':')[1]
+                    entrega_proposta_valor = entrega_proposta_valor.split('</b>')[1]
+                    entrega_proposta_valor_str = entrega_proposta_valor.split()[3]
+                    entrega_proposta_valor_date = datetime.strptime(entrega_proposta_valor_str,
+                                                                    '%d/%m/%Y').date()
+                    current_result[entrega_proposta_chave_str] = entrega_proposta_valor_str
+                    current_result[entrega_proposta_chave] = entrega_proposta_valor_date
 
                 if 'Abertura da Proposta' in line:
-                    # import pdb; pdb.set_trace()
-                    print(line)
+                    abertura_proposta_chave = line.split(':')[0]
+                    abertura_proposta_chave = abertura_proposta_chave.split('<b>')[1]
+                    abertura_proposta_chave = slugify(abertura_proposta_chave)
+                    abertura_proposta_chave_str = '{}{}'.format(abertura_proposta_chave, '-str')
+                    abertura_proposta_valor = line.split(':')[1]
+                    abertura_proposta_str = abertura_proposta_valor.split()[2]
+                    abertura_proposta_data = datetime.strptime(abertura_proposta_str,
+                                                               '%d/%m/%Y').date()
+                    current_result[abertura_proposta_chave_str] = abertura_proposta_str
+                    current_result[abertura_proposta_chave] = abertura_proposta_data
 
             page_results.append(current_result)
 
         if not 'id="proximo" name="btn_proximo"' in response.text:
             log.info('finished!')
             is_last_page = True
-
         return page_results, is_last_page
 
     def search_auctions_by_date(self, search_date):
