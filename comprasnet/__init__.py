@@ -281,5 +281,5 @@ if __name__ == '__main__':
 
     comprasnet = ComprasNet()
     # results = comprasnet.search_auctions_by_date(datetime.now() - timedelta(days=3))
-    results_auction_info = comprasnet.search_auctions_by_date(datetime.now())
+    results_auction_info = comprasnet.search_auctions_by_date(datetime.now() - timedelta(days=1))
     print(results_auction_info)
