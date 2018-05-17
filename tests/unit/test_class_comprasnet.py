@@ -41,7 +41,7 @@ def test_should_search_auctions_by_date(get_search_result_page):
 @mock.patch('comprasnet.requests.get')
 def test_get_data_auctions_pages(get):
     filename = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                            'assets/result_page_sample.html')
+                            '../assets/result_page_sample.html')
     with codecs.open(filename, 'r', 'iso-8859-1') as handle:
         page_result_content = handle.read()
 
@@ -137,7 +137,7 @@ def test_get_data_auctions_pages(get):
 @mock.patch('comprasnet.requests.get')
 def test_should_search_auctions_by_date(get):
     filename = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                            'assets/result_page_sample.html')
+                            '../assets/result_page_sample.html')
     with codecs.open(filename, 'r', 'iso-8859-1') as handle:
         page_result_content = handle.read()
 
