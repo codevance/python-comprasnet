@@ -1,4 +1,4 @@
-from comprasnet import ComprasNet
+from comprasnet import ComprasNet, ComprasNetApi
 import logging
 import sys
 from datetime import datetime
@@ -29,3 +29,8 @@ logging.config.dictConfig({
 comprasnet = ComprasNet()
 results = comprasnet.search_auctions_by_date(datetime.strptime(sys.argv[1], '%d/%m/%Y'))
 print(results)
+
+
+
+comprasnet_api = ComprasNetApi()
+print(comprasnet_api.get_licitacoes_uasgs())
