@@ -165,7 +165,7 @@ class SearchAuctions:
                     except IndexError as e:
                         log.error(
                             'error when trying to extract "Pregão Eletrônico No" - {}'.format(
-                            current_result))
+                                current_result))
                         log.exception(e)
                         pass
 
@@ -292,7 +292,7 @@ class SearchAuctions:
                     except IndexError as e:
                         log.error(
                             'error when trying to extract "Abertura da proposta" - {}'.format(
-                            current_result))
+                                current_result))
                         log.exception(e)
                         pass
 
