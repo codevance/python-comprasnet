@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from slugify import slugify
 from unicodedata import normalize
+from urllib.parse import urlencode
 
 from .api import ComprasNetApi
 
@@ -14,6 +15,10 @@ log = logging.getLogger('comprasnet')
 
 class BaseDetail:
     DETAIL_URL = None
+
+    def __init__(self, uasg_code, auction_code, *args, **kwargs):
+        self.uasg_code = uasg_code
+        self.auction_code = auction_code
 
     def get_params(self):
         raise NotImplementedError
@@ -25,8 +30,15 @@ class BaseDetail:
         raise NotImplementedError
 
     @property
+    def url(self):
+        raise NotImplementedError
+
+    @property
     def data(self):
         return self.scrap_data()
+
+    def __str__(self):
+        return "{}/{}".format(self.uasg_code, self.auction_code)
 
 
 class SearchAuctions:
@@ -323,9 +335,9 @@ class StatuseAuctionDetail(BaseDetail):
 
     DETAIL_URL = "http://comprasnet.gov.br/ConsultaLicitacoes/download/download_editais_detalhe.asp"
 
-    def __init__(self, uasg_code, auction_code, *args, **kwargs):
-        self.uasg_code = uasg_code
-        self.auction_code = auction_code
+    @property
+    def url(self):
+        return "{}?{}".format(self.DETAIL_URL, urlencode(self.get_params()))
 
     def get_params(self):
         return {
@@ -353,16 +365,21 @@ class StatuseAuctionDetail(BaseDetail):
         bs_object = BeautifulSoup(data, "html.parser")
 
         for span in bs_object('span', class_='tex3b'):
-            if 'Itens de Servi' in span.text:
+            if 'Itens de ' in span.text:
                 items_table = span.find_next('table')
 
                 output['itens'] = []
                 for items in items_table.find_all('tr'):
                     item = {}
                     description = items.find('span', class_='tex3b')
-                    item_number, description = description.text.split(' - ')[:2]
-                    item['numero'] = item_number
-                    item['descricao'] = description.strip()
+                    try:
+                        item_number, description = description.text.split(' - ')[:2]
+                        item['numero'] = item_number
+                        item['descricao'] = description.strip()
 
-                    output['itens'].append(item)
+                        output['itens'].append(item)
+                    except ValueError as e:
+                        log.error('error on extract description in "{}". {}'.format(
+                            items, self.url))
+                        log.exception(e)
         return output

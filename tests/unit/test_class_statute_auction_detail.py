@@ -14,6 +14,9 @@ statuse_detail = StatuseAuctionDetail(uasg_code=160478, auction_code=32018)
 def test_class_attributes_and_properties():
     assert statuse_detail.auction_code == 32018
     assert statuse_detail.uasg_code == 160478
+    assert statuse_detail.url == "http://comprasnet.gov.br/ConsultaLicitacoes/download" \
+                                 "/download_editais_detalhe.asp?coduasg=160478&numprp=32018" \
+                                 "&modprp=5"
 
 
 def test_method_get_params():
