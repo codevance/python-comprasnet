@@ -6,9 +6,9 @@ from unittest import mock
 
 import requests
 
-from comprasnet import StatuseDetail
+from comprasnet import StatuseAuctionDetail
 
-statuse_detail = StatuseDetail(uasg_code=160478, auction_code=32018)
+statuse_detail = StatuseAuctionDetail(uasg_code=160478, auction_code=32018)
 
 
 def test_class_attributes_and_properties():

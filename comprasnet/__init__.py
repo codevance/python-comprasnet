@@ -317,7 +317,7 @@ class SearchAuctions:
         return page_results
 
 
-class StatuseDetail(BaseDetail):
+class StatuseAuctionDetail(BaseDetail):
     """Retrive information from statuse details, in this page:
     http://comprasnet.gov.br/ConsultaLicitacoes/download/download_editais_detalhe.asp"""
 
