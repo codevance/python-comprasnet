@@ -346,8 +346,8 @@ class StatuseAuctionDetail(BaseDetail):
 
     def scrap_data(self):
         output = {
-            'uasg_code': self.uasg_code,
-            'auction_code': self.auction_code,
+            'codigo-da-uasg': self.uasg_code,
+            'pregao-eletronico': self.auction_code,
         }
         data = self.get_data()
         bs_object = BeautifulSoup(data, "html.parser")
@@ -356,13 +356,13 @@ class StatuseAuctionDetail(BaseDetail):
             if 'Itens de Servi' in span.text:
                 items_table = span.find_next('table')
 
-                output['items'] = []
+                output['itens'] = []
                 for items in items_table.find_all('tr'):
                     item = {}
                     description = items.find('span', class_='tex3b')
                     item_number, description = description.text.split(' - ')[:2]
-                    item['number'] = item_number
-                    item['description'] = description.strip()
+                    item['numero'] = item_number
+                    item['descricao'] = description.strip()
 
-                    output['items'].append(item)
+                    output['itens'].append(item)
         return output

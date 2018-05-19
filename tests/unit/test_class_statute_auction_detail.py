@@ -35,7 +35,7 @@ def test_method_get_data(get):
     assert statuse_detail.get_data() == page_content
 
 
-@mock.patch('comprasnet.StatuseDetail.get_data')
+@mock.patch('comprasnet.StatuseAuctionDetail.get_data')
 def test_method_scrap_data(get_data):
     filename = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                             '../assets/statusedetail_page_example.html')
@@ -45,94 +45,94 @@ def test_method_scrap_data(get_data):
     get_data.return_value = page_content
 
     output = {
-        'auction_code': 32018,
-        'items': [
+        'pregao-eletronico': 32018,
+        'itens': [
             {
-                'description': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
-                'number': '1'
+                'descricao': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
+                'numero': '1'
             },
             {
-                'description': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
-                'number': '2'
+                'descricao': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
+                'numero': '2'
             },
             {
-                'description': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
-                'number': '3'
+                'descricao': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
+                'numero': '3'
             },
             {
-                'description': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
-                'number': '4'
+                'descricao': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
+                'numero': '4'
             },
             {
-                'description': 'Chamadas  Locais Móvel-Móvel  Intraoperadora SMP-Local-MM-IO(VC1)',
-                'number': '5'
+                'descricao': 'Chamadas  Locais Móvel-Móvel  Intraoperadora SMP-Local-MM-IO(VC1)',
+                'numero': '5'
             },
             {
-                'description': 'Chamadas  Locais Móvel-Móvel  Extraoperadora SMP-Local-MM-EO(VC1)',
-                'number': '6'
+                'descricao': 'Chamadas  Locais Móvel-Móvel  Extraoperadora SMP-Local-MM-EO(VC1)',
+                'numero': '6'
             },
             {
-                'description': 'Chamadas Locais Móvel-Fixo SMP-Local-MF (VC1)',
-                'number': '7'
+                'descricao': 'Chamadas Locais Móvel-Fixo SMP-Local-MF (VC1)',
+                'numero': '7'
             },
             {
-                'description': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
-                'number': '8'
+                'descricao': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
+                'numero': '8'
             },
             {
-                'description': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
-                'number': '9'
+                'descricao': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
+                'numero': '9'
             },
             {
-                'description': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
-                'number': '10'
+                'descricao': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
+                'numero': '10'
             },
             {
-                'description': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
-                'number': '11'
+                'descricao': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
+                'numero': '11'
             },
             {
-                'description': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
-                'number': '12'
+                'descricao': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
+                'numero': '12'
             },
             {
-                'description': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
-                'number': '13'
+                'descricao': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
+                'numero': '13'
             },
             {
-                'description': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
-                'number': '14'
+                'descricao': 'Pacote de Serviços SMP (Voz, Dados, SMS, Etc)',
+                'numero': '14'
             },
             {
-                'description': 'Chamadas  Nacionais Móvel-Móvel Intraoperadora SMP-LDN-MM-IO(VC2 '
+                'descricao': 'Chamadas  Nacionais Móvel-Móvel Intraoperadora SMP-LDN-MM-IO(VC2 '
                                'e VC3)',
-                'number': '15'
+                'numero': '15'
             },
             {
-                'description': 'Chamadas  Nacionais Móvel-Móvel Extraoperadora SMP-LDN-MM-EO(VC2 '
+                'descricao': 'Chamadas  Nacionais Móvel-Móvel Extraoperadora SMP-LDN-MM-EO(VC2 '
                                'e VC3)',
-                'number': '16'
+                'numero': '16'
             },
             {
-                'description': 'Chamadas Nacionais Móvel-Fixo SMP-LDM-MF (VC2 e VC3)',
-                'number': '17'
+                'descricao': 'Chamadas Nacionais Móvel-Fixo SMP-LDM-MF (VC2 e VC3)',
+                'numero': '17'
             },
             {
-                'description': 'Chamadas  Nacionais Móvel-Móvel Intraoperadora SMP-LDN-MM-IO(VC2 '
+                'descricao': 'Chamadas  Nacionais Móvel-Móvel Intraoperadora SMP-LDN-MM-IO(VC2 '
                                'e VC3)',
-                'number': '18'
+                'numero': '18'
             },
             {
-                'description': 'Chamadas  Nacionais Móvel-Móvel Extraoperadora SMP-LDN-MM-EO(VC2 '
+                'descricao': 'Chamadas  Nacionais Móvel-Móvel Extraoperadora SMP-LDN-MM-EO(VC2 '
                                'e VC3)',
-                'number': '19'
+                'numero': '19'
             },
             {
-                'description': 'Chamadas Nacionais Móvel-Fixo SMP-LDM-MF (VC2 e VC3)',
-                'number': '20'
+                'descricao': 'Chamadas Nacionais Móvel-Fixo SMP-LDM-MF (VC2 e VC3)',
+                'numero': '20'
             }
         ],
-        'uasg_code': 160478
+        'codigo-da-uasg': 160478
     }
     assert statuse_detail.scrap_data() == output
     assert statuse_detail.data == output
