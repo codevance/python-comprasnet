@@ -1,0 +1,163 @@
+
+
+<html>
+<head>
+<title>COMPRASNET</title>
+<meta http-equiv="expires" content="0" />
+<link rel="stylesheet" href="/imagens/style1.css" type="text/css" />
+<script type="text/javascript" src="/includes/ValidacoesBasicas.js"></script>
+<script type="text/javascript" src="/includes/aguarde.js"></script>
+<script>
+
+    function Voltar() {
+        if (aguarde()) {
+            bloqueiaAcoes(document);
+            window.location.href = "";
+        }
+    }
+
+    function ValidaCodigo() {
+        //var url = '/includes/ValidaCodigoEdital.asp?numprp=32018&modprp=5&coduasg=160478&bidbird=N';
+		var url = '/ConsultaLicitacoes/Download/Download.asp?coduasg=160478&numprp=32018&modprp=5&bidbird=N';
+		var MyWindow = window.open(url, 'ValidaCodigo', 'maximized=yes, screenX=250, screenY=0, toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=655,height=300');
+        MyWindow.focus();
+    }
+
+    function IrParaItem(qtdePaginas, tipo) {
+        if (aguarde()) {
+            var vMaiorPagina = parseInt(qtdePaginas);
+
+            if (document.frmPaginacao.txbIrPara.value != "") {
+                var pagina = document.frmPaginacao.txbIrPara.value;
+
+                if (!parseInt(pagina)) {
+                    alert('Informe um número entre 1 e ' + vMaiorPagina);
+                    document.frmPaginacao.txbIrPara.focus();
+                    return false;
+                }
+
+                if ((parseInt(pagina) > vMaiorPagina) || parseInt(pagina == 0)) {
+                    alert('Informe um número entre 1 e ' + vMaiorPagina);
+                    document.frmPaginacao.txbIrPara.focus();
+                    return false;
+                }
+                bloqueiaAcoes(document);
+                document.frmPaginacao.pagina.value = document.frmPaginacao.txbIrPara.value;
+                document.frmPaginacao.submit();
+                //window.location.href="download_editais_detalhe.asp"+vParam+"&tipo="+tipo+"&pagina="+pagina;
+            }
+        }
+    }
+
+    function PaginarItens(strTipo, paginaAtual, tipo) {
+        if (aguarde()) {
+
+            bloqueiaAcoes(document);
+
+            var pagina = 0;
+
+            if (strTipo == "Proxima")
+                pagina = paginaAtual + 1;
+            else
+                pagina = paginaAtual - 1;
+
+            document.frmPaginacao.pagina.value = pagina;
+            document.frmPaginacao.submit();
+
+            //window.location.href="download_editais_detalhe.asp"+vParam+"&tipo="+tipo+"&pagina="+pagina;
+        }
+    }
+
+    function VisualizarItens(tipo) {
+        //window.location.href="download_editais_detalhe.asp"+vParam+"&tipo="+tipo;	
+
+        document.frmVisualizarItens.tipo.value = tipo;
+        document.frmVisualizarItens.submit();
+    }
+
+	function visualizarHistoricoEventos(parametros){
+		var url = "/ConsultaLicitacoes/ConsLicitacao_HistoricoEventos.asp" + parametros
+		window.open(url, 'HistoricoEventos', 'maximized=yes, screenX=250, screenY=0, toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=500,height=350');
+		return false;
+	}
+		
+</script>
+
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
+<!-- frame e tabela que apresentarão a mensagem de aguarde na tela -->
+<iframe id="frameloading" name="frameloading" src="javascript:false;" scrolling="no" frameborder="0" style="display: none; position: absolute; left: 0; top: 0; z-index: -1;"></iframe>
+<table style="display:none; position: absolute;" id="loading" name="loading" class="box">
+	<tr><td class="cabecbox">Aguarde!</td></tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td colspan="2"><img src="/imagens/x2_dot.gif" width="5" height="5"></td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <table width="100%" border="0" cellspacing="1" cellpadding="2">
+        <tr>
+          <td width="5"><img src="/imagens/x2_dot.gif" width="5" height="5"></td>
+          <td>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td colspan="2"><img src="/imagens/T_download_editais.gif" width="160" height="23" align="absbottom">
+                </td>
+              </tr>
+              <tr>
+                <td width="5"><img src="/imagens/risco.gif" width="5" height="3"></td>
+                <td width="100%"><img src="/imagens/risco2.gif" width="100%" height="3"></td>
+              </tr>
+            </table>
+          </td>
+          <td width="5"><img src="/imagens/x2_dot.gif" width="5" height="5"></td>
+        </tr>
+      </table>
+      <table border="0" cellspacing="1" cellpadding="2">
+        <tr>
+		<td valign='top' align='right' width='23'><img src='/imagens/tm_bullet.gif' width='6' height='14'></td><td class='tex3'><table width='700' border='0' cellspacing='0' cellpadding='0'><tr><td class='tex3'><p>MINISTÉRIO DA DEFESA</p></td></tr><tr><td class='tex3'><p>Comando do Exército</p></td></tr><tr><td class='tex3'><p>Comando Militar do Sudeste</p></td></tr><tr><td class='tex3'><p>2ªDivisão de Exército</p></td></tr><tr><td class='tex3'><p>11ªBrigada de Infantaria Blindada</p></td></tr><tr><td class='tex3'><p>13 Regimento de Cavalaria Mecanizado</p></td></tr><tr><td class='tex3'><p>Código da UASG: 160478</p></td></tr></table><br></td>
+        </tr>
+        <tr>
+		<td valign='top' align='right' width='23'><img src='/imagens/tm_bullet.gif' width='6' height='14'></td><td class='tex3'><table width='700' border='0' cellspacing='0' cellpadding='0'><tr><td class='tex3'><p><span class='tex3b'>Pregão Eletrônico Nº  3/2018</span><br><b>Objeto:</b>&nbsp;Objeto: Pregão Eletrônico -  Contratação de empresa prestadora de Serviço Móvel Pessoal (SMP), área (019).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <br><b>Edital a partir de:</b>&nbsp;11/05/2018 das 08:30 às 11:30 Hs e das 14:00 às 16:30 Hs<br><b>Endereço:</b>&nbsp;Av Newton Prado, 2251 - Centro - Pirassununga - Sao Paulo                            -                                          - Pirassununga                             (SP)<br><b>Telefone:</b>&nbsp;         <br><b>Fax:</b>&nbsp;               <br><b>Entrega da Proposta:</b>&nbsp;11/05/2018 às 08:30Hs<br></p></td></tr></table><br></td>
+        </tr>
+        
+		    <tr>
+		    <td valign='top' align='right' width='23'><img src='/imagens/tm_bullet.gif' width='6' height='14'></td>
+		    <td class='tex3'>
+		    <span class='tex3b'>Itens de Serviços</span><table width='100%'><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>1 - Pacote de Serviços SMP (Voz, Dados, SMS, Etc)                                                                           </span><br><span class='tex3'>Assinatura Serviço de Voz   Prestação de serviços de voz (acesso à rede GSM) com alcance nacional, possibilitando realizar ligações para estações fixas e móveis a partir de aparelhos fornecidos pela CONTRATADA   Unidade de medida: assinatura - Área (019)<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 60<br>Unidade de fornecimento: Assinatura          </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>2 - Pacote de Serviços SMP (Voz, Dados, SMS, Etc)                                                                           </span><br><span class='tex3'>(Linhas pertencentes ao mesmo contrato)   Prestação de serviços de voz (acesso à rede GSM) com alcance nacional, possibilitando realizar ligações gratuitas para outras estações móveis (desde que pertencentes ao mesmo órgão/entidade   intragrupo) a partir de aparelhos fornecidos pela CONTRATADA. Assinatura Serviço Tarifa Zero em ligações intra rede-    Unidade de medida: assinatura<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 60<br>Unidade de fornecimento: Assinatura          </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>3 - Pacote de Serviços SMP (Voz, Dados, SMS, Etc)                                                                           </span><br><span class='tex3'>Serviço de Gestão das linhas contratadas (On Line)      Serviço de Gerenciamento de uso do SMP via web com autenticação  Unidade de medida: assinatura<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 60<br>Unidade de fornecimento: Assinatura          </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>4 - Pacote de Serviços SMP (Voz, Dados, SMS, Etc)                                                                           </span><br><span class='tex3'>Assinatura pacote de dados   Smartphone   Prestação de serviços de dados (acesso à Internet de banda larga) com alcance nacional, com franquia mensal de tráfego de dados de 3Gb, com redução de velocidade ao exceder e franquia e sem cobrança de MB excedente, a partir de aparelhos fornecidos pela CONTRATADA   Unidade de medida: assinatura<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 60<br>Unidade de fornecimento: Assinatura          </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>5 - Chamadas  Locais Móvel-Móvel  Intraoperadora SMP-Local-MM-IO(VC1)                                                       </span><br><span class='tex3'>VC1 para Móvel   Mesma operadora   Serviço Telefônico Móvel Móvel no Plano Pós pago e na modalidade Local (VC1), compreendendo as ligações oriundas da Área de Mobilidade em que está inserida a Estação Móvel para telefones móveis nesta mesma área e da mesma operadora que originou a chamada   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 6000<br>Unidade de fornecimento: Minutos             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>6 - Chamadas  Locais Móvel-Móvel  Extraoperadora SMP-Local-MM-EO(VC1)                                                       </span><br><span class='tex3'>VC1 para Móvel   Outra operadora   Serviço Telefônico Móvel Móvel no Plano Pós pago e na modalidade Local (VC1), compreendendo as ligações oriundas da Área de Mobilidade em que está inserida a Estação Móvel para telefones móveis nesta mesma área e de operadora distinta daquela que originou a chamada   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 6000<br>Unidade de fornecimento: Minutos             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>7 - Chamadas Locais Móvel-Fixo SMP-Local-MF (VC1)                                                                           </span><br><span class='tex3'>VC1 para Fixo   Serviço Telefônico Móvel Fixo no Plano Pós pago e na modalidade Local (VC1), assim entendidas as ligações oriundas da Área de Mobilidade em que está compreendida a Estação Móvel para telefones fixos nesta mesma área   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 6000<br>Unidade de fornecimento: Minutos             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>8 - Pacote de Serviços SMP (Voz, Dados, SMS, Etc)                                                                           </span><br><span class='tex3'>DSL1   Deslocamento   Serviço de Deslocamento para ligações recebidas fora da Área de Mobilidade, mas dentro da área de numeração primária   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 12000<br>Unidade de fornecimento: Minutos             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>9 - Pacote de Serviços SMP (Voz, Dados, SMS, Etc)                                                                           </span><br><span class='tex3'>DSL2   Deslocamento   Serviço de Deslocamento para ligações recebidas fora da Área de Mobilidade e da área de numeração primária   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 6000<br>Unidade de fornecimento: Minutos             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>10 - Pacote de Serviços SMP (Voz, Dados, SMS, Etc)                                                                           </span><br><span class='tex3'>AD1 Adicional de chamadas   própria rede   Serviço de Adicional por Chamada (AD) para ligações recebidas fora da Área de Mobilidade, mas dentro da rede da operadora   Unidade de medida: ligação<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 9000<br>Unidade de fornecimento: Ligação             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>11 - Pacote de Serviços SMP (Voz, Dados, SMS, Etc)                                                                           </span><br><span class='tex3'>AD2 Adicional de chamadas   rede terceiros   Serviço de Adicional por Chamada (AD) para ligações recebidas fora da Área de Mobilidade, mas utilizando a rede de terceiros   Unidade de medida: ligação<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 9000<br>Unidade de fornecimento: Ligação             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>12 - Pacote de Serviços SMP (Voz, Dados, SMS, Etc)                                                                           </span><br><span class='tex3'>Caixa Postal   Serviço de acesso à caixa postal a partir da Estação Móvel   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 1800<br>Unidade de fornecimento: Minutos             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>13 - Pacote de Serviços SMP (Voz, Dados, SMS, Etc)                                                                           </span><br><span class='tex3'>SMS   Mesma operadora   Serviço de envio de mensagem de texto (SMS) a partir da Estação Móvel para outra Estação Móvel pertencente à mesma operadora   Unidade de medida: mensagem<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 3000<br>Unidade de fornecimento: Mensagem            </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>14 - Pacote de Serviços SMP (Voz, Dados, SMS, Etc)                                                                           </span><br><span class='tex3'>SMS   Outra operadora   Serviço de envio de mensagem de texto (SMS) a partir da Estação Móvel para outra Estação Móvel pertencente à outra operadora   Unidade de medida: mensagem<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 3000<br>Unidade de fornecimento: Mensagem            </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>15 - Chamadas  Nacionais Móvel-Móvel Intraoperadora SMP-LDN-MM-IO(VC2 e VC3)                                                 </span><br><span class='tex3'>VC2 Móvel para Móvel  Mesma operadora   Serviço Telefônico Móvel Móvel no Plano Pós pago e na modalidade Longa Distância Nacional (VC2), compreendendo as ligações para telefones móveis da mesma operadora que originou a chamada   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 6000<br>Unidade de fornecimento: Minutos             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>16 - Chamadas  Nacionais Móvel-Móvel Extraoperadora SMP-LDN-MM-EO(VC2 e VC3)                                                 </span><br><span class='tex3'>VC2 Móvel para Móvel  Outra operadora   Serviço Telefônico Móvel Móvel na modalidade Longa Distância Nacional compreendido pelo Valores de Comunicação 2 (VC2) compreendendo as ligações para telefones móveis de operadora distinta da que originou a chamada   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 6000<br>Unidade de fornecimento: Minutos             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>17 - Chamadas Nacionais Móvel-Fixo SMP-LDM-MF (VC2 e VC3)                                                                    </span><br><span class='tex3'>VC2 Móvel para Fixo   Serviço Telefônico Móvel  Fixo na modalidade Longa Distância Nacional compreendido pelos Valores de Comunicação 2 (VC2)   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 6000<br>Unidade de fornecimento: Minutos             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>18 - Chamadas  Nacionais Móvel-Móvel Intraoperadora SMP-LDN-MM-IO(VC2 e VC3)                                                 </span><br><span class='tex3'>VC3 Móvel para Móvel   Mesma operadora   Mesma operadora   Serviço Telefônico Móvel  Móvel no Plano Pós pago e na modalidade Longa Distância Nacional (VC3), compreendendo as ligações para telefones móveis da mesma operadora que originou a chamada   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 6000<br>Unidade de fornecimento: Minutos             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>19 - Chamadas  Nacionais Móvel-Móvel Extraoperadora SMP-LDN-MM-EO(VC2 e VC3)                                                 </span><br><span class='tex3'>VC3 Móvel para Móvel   Outra operadora   Serviço Telefônico Móvel Móvel na modalidade Longa Distância Nacional compreendido pelo Valores de Comunicação 3 (VC3) compreendendo as ligações para telefones móveis de operadora distinta da que originou a chamada   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 6000<br>Unidade de fornecimento: Minutos             </span><br></td></tr><tr><td width='20' valign='top'>&nbsp;</td><td width='650' valign='top'><span class='tex3b'>20 - Chamadas Nacionais Móvel-Fixo SMP-LDM-MF (VC2 e VC3)                                                                    </span><br><span class='tex3'>VC3 Móvel para Fixo   Serviço Telefônico Móvel  Fixo na modalidade Longa Distância Nacional compreendido pelos Valores de Comunicação 3 (VC3)   Unidade de medida: minutos<br>Tratamento Diferenciado: -<br>Aplicabilidade Decreto 7174: Não<br>Aplicabilidade Margem de Preferência: Não<br>Quantidade: 6000<br>Unidade de fornecimento: Minutos             </span><br></td></tr></table>
+		    </td>
+		    </tr>		
+        
+            <tr>
+		      <td valign="top" align="right" width="23">
+			     <img src="/imagens/tm_bullet.gif" width="6" height="14">
+		      </td>	
+              <td class="tex3">
+                <span class="tex3b">Informações Adicionais do Download</span><br>
+                  <span class="mensagem">O conteúdo deste edital é de inteira responsabilidade do órgão licitante,
+                   e eventuais problemas devem ser tratados com o mesmo.</span><br><br>
+		       </td>
+		     </tr>
+		 
+         		
+         <tr>
+           <td valign="top" align="right" width="23">&nbsp;</td>
+           <td class="tex3">
+			 
+				 <input type="button" id="btnVoltar" name="btnVoltar" value="Voltar" onClick="Voltar();" class="texField2">&nbsp;
+			 
+			    <input type="button" name="Download" value="Download" onClick="javascript:ValidaCodigo();" class="texField2">
+            
+           </td>
+         </tr>
+       </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
+

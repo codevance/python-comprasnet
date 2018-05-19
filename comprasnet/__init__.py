@@ -12,6 +12,23 @@ from .api import ComprasNetApi
 log = logging.getLogger('comprasnet')
 
 
+class BaseDetail:
+    DETAIL_URL = None
+
+    def get_params(self):
+        raise NotImplementedError
+
+    def get_data(self):
+        raise NotImplementedError
+
+    def scrap_data(self):
+        raise NotImplementedError
+
+    @property
+    def data(self):
+        return self.scrap_data()
+
+
 class SearchAuctions:
     """Handle with this search: http://comprasnet.gov.br/ConsultaLicitacoes/ConsLicitacao_Filtro
     .asp"""
@@ -298,3 +315,54 @@ class SearchAuctions:
 
             page_results.append(current_result)
         return page_results
+
+
+class StatuseDetail(BaseDetail):
+    """Retrive information from statuse details, in this page:
+    http://comprasnet.gov.br/ConsultaLicitacoes/download/download_editais_detalhe.asp"""
+
+    DETAIL_URL = "http://comprasnet.gov.br/ConsultaLicitacoes/download/download_editais_detalhe.asp"
+
+    def __init__(self, uasg_code, auction_code, *args, **kwargs):
+        self.uasg_code = uasg_code
+        self.auction_code = auction_code
+
+    def get_params(self):
+        return {
+            'coduasg': self.uasg_code,
+            'numprp': self.auction_code,
+            'modprp': 5,
+        }
+
+    def get_data(self):
+        response = requests.get(self.DETAIL_URL, params=self.get_params())
+        if not response.status_code == requests.codes.ok:
+            log.error('error trying to get statuse from auction {}/{}. Status code: {}'.format(
+                self.uasg_code, self.auction_code, response.status_code
+            ))
+            return
+
+        return response.text
+
+    def scrap_data(self):
+        output = {
+            'uasg_code': self.uasg_code,
+            'auction_code': self.auction_code,
+        }
+        data = self.get_data()
+        bs_object = BeautifulSoup(data, "html.parser")
+
+        for span in bs_object('span', class_='tex3b'):
+            if 'Itens de Servi' in span.text:
+                items_table = span.find_next('table')
+
+                output['items'] = []
+                for items in items_table.find_all('tr'):
+                    item = {}
+                    description = items.find('span', class_='tex3b')
+                    item_number, description = description.text.split(' - ')[:2]
+                    item['number'] = item_number
+                    item['description'] = description.strip()
+
+                    output['items'].append(item)
+        return output
