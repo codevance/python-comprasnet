@@ -358,8 +358,8 @@ class StatuseAuctionDetail(BaseDetail):
 
     def scrap_data(self):
         output = {
-            'codigo-da-uasg': self.uasg_code,
-            'pregao-eletronico': self.auction_code,
+            'codigo-da-uasg': int(self.uasg_code),
+            'pregao-eletronico': int(self.auction_code),
         }
         data = self.get_data()
         bs_object = BeautifulSoup(data, "html.parser")
@@ -371,14 +371,26 @@ class StatuseAuctionDetail(BaseDetail):
                 output['itens'] = []
                 for items in items_table.find_all('tr'):
                     item = {}
-                    description = items.find('span', class_='tex3b')
+                    header = items.find('span', class_='tex3b')
+                    description = items.find('span', class_='tex3')
                     try:
-                        item_number, description = description.text.split(' - ')[:2]
-                        item['numero'] = item_number
-                        item['descricao'] = description.strip()
+                        item_number, title = header.text.split(' - ')[:2]
+                        item['numero'] = int(item_number)
+                        item['titulo'] = title.strip()
+
+                        description = str(description).split('<br/>')
+                        description_text = description[0].split('<br/>')
+                        description_text = description_text[0].split('<span class="tex3">')[1]
+                        diff_treattment = description[1].split(':')
+
+                        item['tratamento-diferenciado'] = diff_treattment[1].strip()
+                        item['aplicabilidade-decreto'] = description[2].split(':')[1].strip()
+                        item['aplicabilidade-margem-de-preferencia'] = description[3].split(':')[1].strip()
+                        item['quantidade'] = int(description[4].split(':')[1].strip())
+                        item['unidade-de-fornecimento'] = description[5].split(':')[1].strip('</span>').split()[0]
 
                         output['itens'].append(item)
-                    except ValueError as e:
+                    except (ValueError, IndexError) as e:
                         log.error('error on extract description in "{}". {}'.format(
                             items, self.url))
                         log.exception(e)
