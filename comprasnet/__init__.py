@@ -1,10 +1,13 @@
 import logging.config
-from datetime import datetime, date, timedelta
-from unicodedata import normalize
+from datetime import date, datetime
+import re
 
 import requests
 from bs4 import BeautifulSoup
 from slugify import slugify
+from unicodedata import normalize
+
+from .api import ComprasNetApi
 
 log = logging.getLogger('comprasnet')
 
@@ -50,7 +53,6 @@ class ComprasNet:
         page_results = []
 
         response = requests.get(self.SEARCH_BIDS_URL, data)
-        print(str(response.status_code))
         if not response.status_code == requests.codes.ok:
             log.error('error trying to get auctions from {}, page {}. Status code: {}'.format(
                 data['dt_publ_ini'], data['numpag'], response.status_code
@@ -78,106 +80,151 @@ class ComprasNet:
             for line in str(td).split("<br/>"):
 
                 if 'digo da UASG' in line:
-                    current_result['cabecalho'] = header
-                    codigo_da_uasg_chave = line.split(":")[0]
-                    codigo_da_uasg_chave = slugify(codigo_da_uasg_chave)
-                    codigo_da_uasg_valor = line.split("digo da UASG: ")[-1].strip()
-                    current_result[codigo_da_uasg_chave] = codigo_da_uasg_valor
+
+                    try:
+                        current_result['cabecalho'] = header
+                        codigo_da_uasg_chave = line.split(":")[0]
+                        codigo_da_uasg_chave = slugify(codigo_da_uasg_chave)
+                        codigo_da_uasg_valor = line.split("digo da UASG: ")[-1].strip()
+                        current_result[codigo_da_uasg_chave] = codigo_da_uasg_valor
+                    except IndexError as e:
+                        log.error('error when trying to extract "código da UASG":')
+                        log.exception(e)
+                        pass
 
                 if 'Pregão Eletrônico Nº' in line:
-                    pregao_eletronico_chave = line.split('Nº')[0].split('<b>')[-1]
-                    pregao_eletronico_chave = slugify(pregao_eletronico_chave)
-                    pregao_eletronico_valor = line.split("Pregão Eletrônico Nº ")[-1].strip()
-                    pregao_eletronico_valor = pregao_eletronico_valor.replace('/', '')
-                    pregao_eletronico_valor = pregao_eletronico_valor.replace('<b>', '')
-                    pregao_eletronico_valor = pregao_eletronico_valor.replace('</b>', '')
-                    current_result[pregao_eletronico_chave] = pregao_eletronico_valor
+                    try:
+                        pregao_eletronico_chave = line.split('Nº')[0].split('<b>')[-1]
+                        pregao_eletronico_chave = slugify(pregao_eletronico_chave)
+                        pregao_eletronico_valor = line.split("Pregão Eletrônico Nº ")[-1].strip()
+                        pregao_eletronico_valor = pregao_eletronico_valor.replace('/', '')
+                        pregao_eletronico_valor = pregao_eletronico_valor.replace('<b>', '')
+                        pregao_eletronico_valor = pregao_eletronico_valor.replace('</b>', '')
+                        current_result[pregao_eletronico_chave] = pregao_eletronico_valor
+                    except IndexError as e:
+                        log.error('error when trying to extract "Pregão Eletrônico No":')
+                        log.exception(e)
+                        pass
 
                 if 'Objeto:' in line:
-                    objeto_chave = line.split()[1].split(':')[0].lower()
-                    objeto_valor = line.split('Objeto:')[-1].strip()
-                    current_result[objeto_chave] = objeto_valor
+                    try:
+                        objeto_chave = line.split()[1].split(':')[0].lower()
+                        objeto_valor = line.split('Objeto:')[-1].strip()
+                        current_result[objeto_chave] = objeto_valor
+                    except IndexError as e:
+                        log.error('error when trying to extract "Objeto":')
+                        log.exception(e)
+                        pass
 
                 if 'Edital a partir de' in line:
-                    edital_a_partir_de = line.split(':')[1].strip()
-                    edital_a_partir_de = edital_a_partir_de.split('</b>')[1]
-                    edital_a_partir_de = normalize('NFKD', edital_a_partir_de)
-                    edital_a_partir_de = edital_a_partir_de.split('das')[0]
-                    edital_a_partir_de = edital_a_partir_de.replace(' ', '')
-                    edital_a_partir_de_data = datetime.strptime(edital_a_partir_de,
-                                                                '%d/%m/%Y').date()
-                    current_result['edital-a-partir-de-str'] = edital_a_partir_de
-                    current_result['edital-a-partir-de'] = edital_a_partir_de_data
+
+                    try:
+                        edital_a_partir_de = line.split(':')[1].strip()
+                        edital_a_partir_de = edital_a_partir_de.split('</b>')[1]
+                        edital_a_partir_de = normalize('NFKD', edital_a_partir_de)
+                        edital_a_partir_de = edital_a_partir_de.split('das')[0]
+                        edital_a_partir_de = edital_a_partir_de.replace(' ', '')
+                        edital_a_partir_de_data = datetime.strptime(edital_a_partir_de,
+                                                                    '%d/%m/%Y').date()
+                        current_result['edital-a-partir-de-str'] = edital_a_partir_de
+                        current_result['edital-a-partir-de'] = edital_a_partir_de_data
+                    except IndexError as e:
+                        log.error('error when trying to extract "Edital a partir de":')
+                        log.exception(e)
+                        pass
 
                 if 'Endereço' in line:
-                    endereco_chave = line.split()[0].strip('<b>')
-                    endereco_chave = endereco_chave.split(':</')[0]
-                    endereco_chave = slugify(endereco_chave)
-                    endereco_valor = line.split(':')[1]
-                    endereco_valor = endereco_valor.split('</b>')[1]
-                    endereco_valor = normalize('NFKD', endereco_valor)
-                    current_result[endereco_chave] = endereco_valor
-                    print(current_result)
+                    try:
+                        endereco_chave = line.split()[0].strip('<b>')
+                        endereco_chave = endereco_chave.split(':</')[0]
+                        endereco_chave = slugify(endereco_chave)
+                        endereco_valor = line.split(':')[1]
+                        endereco_valor = endereco_valor.split('</b>')[1]
+                        endereco_valor = normalize('NFKD', endereco_valor)
+                        current_result[endereco_chave] = endereco_valor
+                    except IndexError as e:
+                        log.error('error when trying to extract "Endereço":')
+                        log.exception(e)
+                        pass
 
                 if 'Telefone' in line:
-                    telefone_chave = line.split(':')[0]
-                    telefone_chave = telefone_chave.split('<b>')[1]
-                    telefone_chave = slugify(telefone_chave)
-                    telefone_valor = line.split(':')[1]
+                    try:
+                        telefone_chave = line.split(':')[0]
+                        telefone_chave = telefone_chave.split('<b>')[1]
+                        telefone_chave = slugify(telefone_chave)
+                        telefone_valor = line.split(':')[1]
 
-                    if telefone_valor:
-                        telefone_valor = telefone_valor.split('</b>')[1]
-                        telefone_valor = normalize('NFKD', telefone_valor)
-                        telefone_valor = telefone_valor.strip(' ')
-                        telefone_valor = telefone_valor.replace('0xx', '')
-                    else:
-                        telefone_valor = None
+                        if telefone_valor:
+                            telefone_valor = telefone_valor.split('</b>')[1]
+                            telefone_valor = normalize('NFKD', telefone_valor)
+                            telefone_valor = telefone_valor.strip(' ')
+                            telefone_valor = telefone_valor.replace('0xx', '')
+                        else:
+                            telefone_valor = None
 
-                    current_result[telefone_chave] = telefone_valor
+                        current_result[telefone_chave] = telefone_valor
+                    except IndexError as e:
+                        log.error('error when trying to extract "Telefone":')
+                        log.exception(e)
+                        pass
 
                 if 'Fax' in line:
-                    fax_chave = line.split(':')[0]
-                    fax_chave = fax_chave.split('<b>')[1]
-                    fax_chave = slugify(fax_chave)
-                    fax_valor = line.split(':')[1]
+                    try:
+                        fax_chave = line.split(':')[0]
+                        fax_chave = fax_chave.split('<b>')[1]
+                        fax_chave = slugify(fax_chave)
+                        fax_valor = line.split(':')[1]
 
-                    if fax_valor:
-                        fax_valor = fax_valor.split('</b>')[1]
-                        fax_valor = fax_valor.replace(' ', '')
-                        fax_valor = normalize('NFKD', fax_valor)
-                        fax_valor = fax_valor.replace(' ', '')
-                        fax_valor = fax_valor.replace('0xx', '')
-                    else:
-                        fax_valor = None
-                    
-                    current_result[fax_chave] = fax_valor
-                    print(current_result)
+                        if fax_valor:
+                            fax_valor = fax_valor.split('</b>')[1]
+                            fax_valor = fax_valor.replace(' ', '')
+                            fax_valor = normalize('NFKD', fax_valor)
+                            fax_valor = fax_valor.replace(' ', '')
+                            fax_valor = fax_valor.replace('0xx', '')
+                        else:
+                            fax_valor = None
+
+                        current_result[fax_chave] = fax_valor
+                    except IndexError as e:
+                        log.error('error when trying to extract "Fax":')
+                        log.exception(e)
+                        pass
 
                 if 'Entrega da Proposta' in line:
-                    entrega_proposta_chave = line.split(':')[0]
-                    entrega_proposta_chave = entrega_proposta_chave.split('<b>')[1]
-                    entrega_proposta_chave = slugify(entrega_proposta_chave)
-                    entrega_proposta_chave_str = '{}{}'.format(entrega_proposta_chave, '-str')
+                    try:
+                        entrega_proposta_chave = line.split(':')[0]
+                        entrega_proposta_chave = entrega_proposta_chave.split('<b>')[1]
+                        entrega_proposta_chave = slugify(entrega_proposta_chave)
+                        entrega_proposta_chave_str = '{}{}'.format(entrega_proposta_chave, '-str')
 
-                    entrega_proposta_valor = line.split(':')[1]
-                    entrega_proposta_valor = entrega_proposta_valor.split('</b>')[1]
-                    entrega_proposta_valor_str = entrega_proposta_valor.split()[3]
-                    entrega_proposta_valor_date = datetime.strptime(entrega_proposta_valor_str,
-                                                                    '%d/%m/%Y').date()
-                    current_result[entrega_proposta_chave_str] = entrega_proposta_valor_str
-                    current_result[entrega_proposta_chave] = entrega_proposta_valor_date
+                        entrega_proposta_valor = line.split(':')[1]
+                        entrega_proposta_valor = entrega_proposta_valor.split('</b>')[1]
+                        entrega_proposta_valor_str = entrega_proposta_valor.split()[3]
+                        entrega_proposta_valor_date = datetime.strptime(entrega_proposta_valor_str,
+                                                                        '%d/%m/%Y').date()
+                        current_result[entrega_proposta_chave_str] = entrega_proposta_valor_str
+                        current_result[entrega_proposta_chave] = entrega_proposta_valor_date
+                    except IndexError as e:
+                        log.error('error when trying to extract "Entrega da proposta":')
+                        log.exception(e)
+                        pass
 
                 if 'Abertura da Proposta' in line:
-                    abertura_proposta_chave = line.split(':')[0]
-                    abertura_proposta_chave = abertura_proposta_chave.split('<b>')[1]
-                    abertura_proposta_chave = slugify(abertura_proposta_chave)
-                    abertura_proposta_chave_str = '{}{}'.format(abertura_proposta_chave, '-str')
-                    abertura_proposta_valor = line.split(':')[1]
-                    abertura_proposta_str = abertura_proposta_valor.split()[2]
-                    abertura_proposta_data = datetime.strptime(abertura_proposta_str,
-                                                               '%d/%m/%Y').date()
-                    current_result[abertura_proposta_chave_str] = abertura_proposta_str
-                    current_result[abertura_proposta_chave] = abertura_proposta_data
+                    try:
+                        abertura_proposta_chave = line.split(':')[0]
+                        abertura_proposta_chave = abertura_proposta_chave.split('<b>')[1]
+                        abertura_proposta_chave = slugify(abertura_proposta_chave)
+                        abertura_proposta_chave_str = '{}{}'.format(abertura_proposta_chave, '-str')
+                        abertura_proposta_valor = line.split(':')[1]
+                        abertura_proposta_str = abertura_proposta_valor.split()[2]
+                        abertura_proposta_data = datetime.strptime(abertura_proposta_str,
+                                                                   '%d/%m/%Y').date()
+                        current_result[abertura_proposta_chave_str] = abertura_proposta_str
+                        current_result[abertura_proposta_chave] = abertura_proposta_data
+                    except IndexError as e:
+                        log.error('error when trying to extract "Abertura da proposta":')
+                        log.exception(e)
+                        pass
 
             page_results.append(current_result)
 
@@ -219,7 +266,6 @@ class ComprasNet:
         page_results = []
 
         response = requests.get(self.SEARCH_BIDS_URL, data)
-        print(str(response.status_code))
         if not response.status_code == requests.codes.ok:
             log.error('error trying to get auctions from {}, page {}. Status code: {}'.format(
                 data['dt_publ_ini'], data['numpag'], response.status_code
@@ -253,33 +299,3 @@ class ComprasNet:
             is_last_page = True
 
         return page_results, is_last_page
-
-
-if __name__ == '__main__':
-    logging.config.dictConfig({
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'standard': {
-                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-            },
-        },
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-                'formatter': 'standard',
-            },
-        },
-        'loggers': {
-            '': {
-                'level': 'DEBUG',
-                'handlers': ['console'],
-                'propagate': False
-            },
-        },
-    })
-
-    comprasnet = ComprasNet()
-    # results = comprasnet.search_auctions_by_date(datetime.now() - timedelta(days=3))
-    results_auction_info = comprasnet.search_auctions_by_date(datetime.now() - timedelta(days=1))
-    print(results_auction_info)

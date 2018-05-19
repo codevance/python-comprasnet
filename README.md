@@ -12,5 +12,29 @@ How to install
 How to test
 ===========
 
-1. Install `pytest`
-1. Run `pytest tests/`
+To run all tests you need to install test requirements before:
+
+```bash
+pip install -r requirements-test.txt
+```
+
+Unit tests
+----------
+
+```bash
+make test
+```
+
+Integration tests
+-----------------
+
+```bash
+make integration_test
+```
+
+Examples to how to use
+======================
+
+See `python contrib/example.py`
+
+
