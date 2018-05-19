@@ -76,11 +76,15 @@ class ComprasNet:
 
             current_result['cidade'] = cidade
             current_result['uf'] = uf
+            headers = [element for element in td.b.contents
+                       if 'Código da UASG' not in element]
+            headers = [element.strip() for element in headers
+                       if isinstance(element, str)]
+            current_result['cabecalho'] = headers
 
             for line in str(td).split("<br/>"):
 
                 if 'digo da UASG' in line:
-
                     try:
                         current_result['cabecalho'] = header
                         codigo_da_uasg_chave = line.split(":")[0]
