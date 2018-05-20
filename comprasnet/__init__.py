@@ -149,7 +149,6 @@ class SearchAuctions:
         page_results = []
 
         bs_object = BeautifulSoup(data, "html.parser")
-        header = []
         for form in bs_object.find_all('form'):
             if 'Form' not in form.attrs['name']:
                 continue
@@ -166,12 +165,15 @@ class SearchAuctions:
             current_result['cidade'] = cidade
             current_result['uf'] = uf
 
+            headers = str(td.b).split('<b>')[1].split('<br/>')[:-2]
+            headers = [header.strip() for header in headers]
+
             for line in str(td).split("<br/>"):
 
                 if 'digo da UASG' in line:
 
                     try:
-                        current_result['cabecalho'] = header
+                        current_result['cabecalho'] = headers
                         codigo_da_uasg_chave = line.split(":")[0]
                         codigo_da_uasg_chave = slugify(codigo_da_uasg_chave)
                         codigo_da_uasg_valor = line.split("digo da UASG: ")[-1].strip()
