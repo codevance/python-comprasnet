@@ -1,0 +1,11 @@
+{
+	"minutes_of_backup_register": "http://comprasnet.gov.br/livre/pregao/termocadres.asp?prgcod=712965&co_no_uasg=986589&numprp=192018&f_lstSrp=&f_Uf=&f_numPrp=&f_coduasg=&f_tpPregao=&f_lstICMS=&f_dtAberturaIni=&f_dtAberturaFim=",
+	"clarification": "http://comprasnet.gov.br/livre/pregao/avisos1.asp?prgCod=712965&Origem=Avisos&Tipo=E",
+	"auction_id": "N\u00ba 00019/2018 (SRP)",
+	"result_per_provider": "http://comprasnet.gov.br/livre/pregao/FornecedorResultado.asp?prgcod=712965&strTipoPregao=E",
+	"terms_of_homologation": "http://comprasnet.gov.br/livre/pregao/termohom.asp?prgcod=712965&co_no_uasg=986589&numprp=192018&f_lstSrp=&f_Uf=&f_numPrp=&f_coduasg=&f_tpPregao=&f_lstICMS=&f_dtAberturaIni=&f_dtAberturaFim=",
+	"auction_minute": "http://comprasnet.gov.br/livre/pregao/AtaEletronico.asp?co_no_uasg=986589&&uasg=986589&numprp=192018&Seq=1&f_lstSrp=&f_Uf=&f_numPrp=&f_coduasg=&f_tpPregao=&f_lstICMS=&f_dtAberturaIni=&f_dtAberturaFim=",
+	"proposal_attachments": "http://comprasnet.gov.br/livre/pregao/AnexosProposta.asp?uasg=986589&numprp=192018&prgcod=712965",
+	"terms_of_adjudication": "http://comprasnet.gov.br/livre/pregao/termojulg.asp?prgcod=712965&Acao=A&co_no_uasg=986589&numprp=192018&f_lstSrp=&f_Uf=&f_numPrp=&f_coduasg=&f_tpPregao=&f_lstICMS=&f_dtAberturaIni=&f_dtAberturaFim=",
+	"declaration": "http://comprasnet.gov.br/livre/pregao/declaracoesProposta.asp?prgCod=712965"
+}

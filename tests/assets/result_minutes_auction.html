@@ -1,0 +1,142 @@
+<html class="gr__comprasnet_gov_br"><head>
+	<title>COMPRASNET - O SITE DE COMPRAS DO GOVERNO</title>
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="cache-control" content="private">
+	<meta http-equiv="pragma" content="no-cache">
+	<script type="text/javascript" src="/includes/aguarde.js"></script>
+	<link rel="stylesheet" href="/css/estilo.css" type="text/css">
+	<link rel="stylesheet" href="/imagens/style1.css" type="text/css">
+	<script type="text/javascript">
+	    function RetornarListaPregao(){
+	        if(aguarde()){
+	            var url;
+	            url = "ata4.asp?lstSrp=&uf=&numprp=&co_uasg=&rdTpPregao=&lstICMS=&dt_ini_sessao=&dt_fim_sessao=";
+
+	            bloqueiaAcoes(document);
+	            document.location.href = url;
+	        }
+	    }
+
+	    function VisualizarRecursosPregao() {	
+	        window.open('VisualizarRecursosPregao.asp?prgCod=712965','TodosRecursos','maximized=yes,screenX=0,screenY=0,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=800,height=400');
+	    }
+
+	    function ValidaCodigo(NomeArquivo, coduasg) {			
+	        if(aguarde()){
+	            bloqueiaAcoes(document);
+	            document.location.href = 'AtaEletronico.asp?co_no_uasg=' + coduasg + '&' + NomeArquivo;
+	        }
+	        //var url = '/includes/ValidaCodigoAta.asp?arquivo='+NomeArquivo+'&coduasg='+coduasg;
+	        //var MyWindow = window.open(url, 'ValidaCodigo', 'maximized=yes, screenX=250, screenY=0, toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=550,height=300');			
+	        //MyWindow.focus();
+	    }
+		
+	    function termoAdjudicacaoJulgamento(prgcod,tipo){
+	        if(aguarde()){
+	            bloqueiaAcoes(document);
+	            document.location.href = "termojulg.asp?prgcod=" + prgcod + "&Acao=" + tipo + "&co_no_uasg=986589&numprp=192018&f_lstSrp=&f_Uf=&f_numPrp=&f_coduasg=&f_tpPregao=&f_lstICMS=&f_dtAberturaIni=&f_dtAberturaFim=";
+	        }
+	    }
+		
+	    function termoHomologacao(prgcod, coduasg, numprp){
+	        if(aguarde()){
+	            bloqueiaAcoes(document);
+	            document.location.href = "termohom.asp?prgcod=" + prgcod + "&co_no_uasg=986589&numprp=192018&f_lstSrp=&f_Uf=&f_numPrp=&f_coduasg=&f_tpPregao=&f_lstICMS=&f_dtAberturaIni=&f_dtAberturaFim=";
+	        }
+	    }
+
+	    function AtaCadReserva(prgcod, coduasg, numprp){
+	        if(aguarde()){
+	            bloqueiaAcoes(document);
+	            document.location.href = "termocadres.asp?prgcod=" + prgcod + "&co_no_uasg=986589&numprp=192018&f_lstSrp=&f_Uf=&f_numPrp=&f_coduasg=&f_tpPregao=&f_lstICMS=&f_dtAberturaIni=&f_dtAberturaFim=";
+	        }
+	    }
+		
+	    function resultadoFornecedor(prgcod){
+	        if(aguarde()){
+	            bloqueiaAcoes(document);
+	            document.location.href = "FornecedorResultado.asp?prgcod=" + prgcod + "&strTipoPregao=E";
+	        }
+	    }
+		
+	    function exibeQuadro(prgcod,tipo){
+	        if(aguarde()){
+	            var url;
+	            url = "avisos1.asp?prgCod=" + prgcod + "&Origem=Avisos&Tipo=" + tipo
+	            window.open(url,"Ajuda","maximized=yes,screenX=0,screenY=0,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=550,height=390,left=240,top=190");
+	        }
+	    }
+
+	    function anexos() {
+	        var url;
+	        url = "AnexosProposta.asp?uasg=986589&numprp=192018&prgcod=712965";
+	        window.open(url, 'AnexosProposta', 'maximized=yes, screenX=0, screenY=0, toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=800,height=400');
+	        return false;
+	    }
+		
+	    function Declaracoes(prgcod){			
+	        window.open('declaracoesProposta.asp?prgCod=712965','Declarações','maximized=yes,screenX=0,screenY=0,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=800,height=400');			
+	        return false;
+	    }
+	
+	</script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" data-gr-c-s-loaded="true" style="">
+    <h2>CONSULTA ATA DO PREGÃO</h2>
+
+	<table border="0" width="98%" cellspacing="1" cellpadding="2">
+		<tbody><tr>
+			<td valign="top" align="right" width="2%"><img height="14" src="/imagens/tm_bullet.gif" width="6" alt=""></td>
+			<td class="tex3b" width="98%">
+				Visualizar Ata
+				<br><br>Uasg:&nbsp;&nbsp;
+					<span class="tex3">986589 - PREFEITURA MUNICIPAL DE JACAREÍ                   </span>
+				<br><br>Pregão:&nbsp;&nbsp;
+					<span class="mensagem2">Nº 00019/2018 (SRP)</span>
+				<br><br>
+				
+					    <a href="#1234-987-1" name="1234-987-1" onclick="javascript:ValidaCodigo('&amp;uasg=986589&amp;numprp=192018&amp;Seq=1&amp;f_lstSrp=&amp;f_Uf=&amp;f_numPrp=&amp;f_coduasg=&amp;f_tpPregao=&amp;f_lstICMS=&amp;f_dtAberturaIni=&amp;f_dtAberturaFim=',986589 );">
+					    Ata do Pregão - 02/03/2018 10:25
+					    </a>
+					    <br><br>
+					    
+				    <hr>
+			    </td>
+		    </tr>
+		    <tr>
+			    <td align="center" colspan="2">
+				    <input type="button" name="btnResultadoFornecr" id="btnResultadoFornecr" value="Resultado por Fornecedor" onclick="javascript:resultadoFornecedor(712965);" class="texField2" style="width:200px">
+				    <input type="button" name="btnDeclaracoes" id="btnDeclaracoes" value="Declarações" onclick="javascript:Declaracoes(712965);" class="texField2">
+                    
+					    &nbsp;<input type="button" name="atacadastroreserva" value="Ata do Cadastro de Reserva" onclick="javascript:AtaCadReserva(712965,986589,192018);" class="texField2" style="width:200px">
+				    
+				    <br><br>
+    									 		
+				    <input type="button" name="btnVoltar" id="btnVoltar" value="Voltar" class="texField2" onclick="javascript:RetornarListaPregao();">
+				    &nbsp;<input type="button" name="AnexosProposta" value="Anexos de Proposta" class="texField2" onclick="anexos();">
+
+				    
+					    &nbsp;<input type="button" name="btnTermAdj" id="btnTermAdj" value="Termo de Adjudicação" onclick="javascript:termoAdjudicacaoJulgamento(712965,'A');" class="texField2" style="width:180px">
+				    
+					    &nbsp;<input type="button" name="termodehomologacao" value="Termo de Homologação" onclick="javascript:termoHomologacao(712965,986589,192018);" class="texField2" style="width:180px">
+				    
+				    <br><br>
+
+				    
+					    <input type="button" name="esclarecimento" id="esclarecimento" value="Esclarecimentos" onclick="javascript:exibeQuadro(712965,'E');" class="texField2" style="width:130px"> &nbsp;
+				    
+			</td>
+		</tr>
+	</tbody></table>
+	<br>	
+<!-- frame e tabela que apresentarão a mensagem de aguarde na tela -->
+<iframe id="frameloading" name="frameloading" src="javascript:false;" scrolling="no" frameborder="0" style="display: none; position: absolute; left: 0px; top: 0px; z-index: -1; width: 0px; height: 0px;"></iframe>
+<table style="display: none; position: absolute; left: 0px; top: 0px; z-index: -1;" id="loading" name="loading" class="box">
+	<tbody><tr><td class="cabecbox">Aguarde!</td></tr>
+</tbody></table>
+
+<script type="text/javascript">
+    desbloqueiaAcoes(document);
+</script>
+
+</body><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>

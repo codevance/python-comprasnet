@@ -1,12 +1,13 @@
 import codecs
 import os
+import pytest
 from collections import namedtuple
 from datetime import date
 from unittest import mock
 
 import requests
 
-from comprasnet import SearchAuctions
+from comprasnet.pages.search_auctions import SearchAuctions
 
 
 def test_class_attributes_and_properties():
@@ -30,16 +31,14 @@ def test_class_attributes_and_properties():
 
 def test_method_get_search_params():
     search_auctions = SearchAuctions()
-    assert list(search_auctions.get_search_params().keys()) == [
-        'numprp', 'dt_publ_ini', 'dt_publ_fim', 'chkModalidade', 'chk_concor', 'chk_pregao',
-        'chk_rdc', 'optTpPesqMat', 'optTpPesqServ', 'chkTodos', 'chk_concorTodos',
-        'chk_pregaoTodos', 'txtlstUf', 'txtlstMunicipio', 'txtlstUasg', 'txtlstGrpMaterial',
-        'txtlstClasMaterial', 'txtlstMaterial', 'txtlstGrpServico', 'txtlstServico', 'txtObjeto',
-        'numpag'
-    ]
+    expected = ['chkModalidade', 'chkTodos', 'chk_concor', 'chk_concorTodos', 'chk_pregao', 'chk_pregaoTodos',
+                'chk_rdc', 'dt_publ_fim', 'dt_publ_ini', 'numpag', 'numprp', 'optTpPesqMat', 'optTpPesqServ',
+                'txtObjeto', 'txtlstClasMaterial', 'txtlstGrpMaterial', 'txtlstGrpServico', 'txtlstMaterial',
+                'txtlstMunicipio', 'txtlstServico', 'txtlstUasg', 'txtlstUf']
+    assert sorted(search_auctions.get_search_params().keys()) == expected
 
 
-@mock.patch('comprasnet.requests.get')
+@mock.patch('comprasnet.pages.search_auctions.requests.get')
 def test_method_get_search_metadata(get):
     filename = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                             '../assets/result_page_sample.html')
@@ -58,10 +57,12 @@ def test_method_get_search_metadata(get):
     assert get.called_with(search_auctions.SEARCH_URL, search_auctions.get_search_params())
 
 
+@pytest.mark.xfail(reason="Not Implemented")
 def test_method_get_search_page_data():
     assert False
 
 
+@pytest.mark.xfail(reason="Not Implemented")
 def test_method_scrap_search_page():
     filename = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                             '../assets/result_page_sample.html')

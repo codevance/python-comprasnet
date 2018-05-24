@@ -1,6 +1,7 @@
+from comprasnet.pages.auction_minutes import AuctionMinutes
 import logging
-
 import requests
+
 
 log = logging.getLogger('comprasnet')
 
@@ -41,5 +42,8 @@ class ComprasNetApi:
         response = self._request_search('licitacoes', 'uasgs', **params)
         if response.status_code == 200:
             return response.json()
+
+    def get_auction_minutes(self, co_no_uasg, numprp):
+        return AuctionMinutes(co_no_uasg, numprp).to_json()
 
 
